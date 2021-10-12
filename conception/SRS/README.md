@@ -184,7 +184,7 @@ The shopper has to get registered to be able to order a delivery and to deliver 
 The shopper can give overall review about the delivery person and services.
 
 ### 3.3	Behaviour Requirements
-<img src="https://github.com/Advancia-Group/DelSOS/blob/dev/SRS/usecase.PNG" alt="usecase"   />
+<img src="https://github.com/DelSOS/DelSOS-back/blob/main/conception/SRS/usecase.PNG" alt="usecase"   />
 
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -194,7 +194,7 @@ The shopper can give overall review about the delivery person and services.
  
  - Description
  
- <img src="https://github.com/Advancia-Group/DelSOS/blob/dev/SRS/subscription.png" alt="us"   />
+ <img src="https://github.com/DelSOS/DelSOS-back/blob/main/conception/SRS/subscription.png" alt="us"   />
  
  -------------------------------------------------------------------------------------------------------------------------
 
@@ -205,7 +205,7 @@ The shopper can give overall review about the delivery person and services.
  
 - Description
 
-|<img src="https://github.com/Advancia-Group/DelSOS/blob/dev/SRS/pickout.png" alt="us"   />| <img src="https://github.com/Advancia-Group/DelSOS/blob/dev/SRS/delivery.png" alt="us" />|
+|<img src="https://github.com/DelSOS/DelSOS-back/blob/main/conception/SRS/pickout.png" alt="us"   />| <img src="https://github.com/DelSOS/DelSOS-back/blob/main/conception/SRS/delivery.png" alt="us" />|
 |---|---|
 
  ***Use case*** : Getting payed
