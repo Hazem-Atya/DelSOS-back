@@ -35,7 +35,10 @@ export class UserService {
         throw new ConflictException(`the email should be unique`);
       }
     return "user created";
-
+    /* {
+        
+        accessToken: await this.authService.createAccessToken(user._id),
+      }; */
     }
 
 

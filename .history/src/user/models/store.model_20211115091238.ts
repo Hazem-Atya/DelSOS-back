@@ -1,6 +1,6 @@
 import { Address } from './Address';
 import * as mongoose from 'mongoose';
-import { ROLE } from './role.enum';
+import { ROLE } from './role';
 
 
 export const Store = new mongoose.Schema({

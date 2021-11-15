@@ -1,5 +1,5 @@
 import { Address } from './Address';
-import { ROLE } from './role.enum';
+import { ROLE } from './role';
 import * as mongoose from 'mongoose';
 import { BankDetails } from './BankDetails';
 import { Prop, Schema } from '@nestjs/mongoose';

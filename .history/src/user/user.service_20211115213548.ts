@@ -11,6 +11,7 @@ export class UserService {
   constructor(
     @InjectModel('User') 
     private readonly userModel: Model<Shopper>,
+   
 ) {}
   
   async register(userData: CreateShopperDto): Promise<any> {
@@ -35,7 +36,10 @@ export class UserService {
         throw new ConflictException(`the email should be unique`);
       }
     return "user created";
-
+    /* {
+        
+        accessToken: await this.authService.createAccessToken(user._id),
+      }; */
     }
 
 
