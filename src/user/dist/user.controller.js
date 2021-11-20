@@ -52,11 +52,23 @@ var UserController = /** @class */ (function () {
     function UserController(userService) {
         this.userService = userService;
     }
-    UserController.prototype.register = function (createShopperDto) {
+    UserController.prototype.shopperRregister = function (createShopperDto) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.register(createShopperDto)];
+                    case 0: return [4 /*yield*/, this.userService.registerShopper(createShopperDto)];
+                    case 1: 
+                    //  return createShopperDto;
+                    return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    UserController.prototype.storeRegister = function (createStoreDto) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userService.registerStore(createStoreDto)];
                     case 1: 
                     //  return createShopperDto;
                     return [2 /*return*/, _a.sent()];
@@ -73,7 +85,17 @@ var UserController = /** @class */ (function () {
         common_1.HttpCode(common_1.HttpStatus.CREATED),
         swagger_1.ApiCreatedResponse({}),
         __param(0, common_1.Body())
-    ], UserController.prototype, "register");
+    ], UserController.prototype, "shopperRregister");
+    __decorate([
+        swagger_1.ApiHeader({
+            name: 'Bearer',
+            description: 'the token we need for auth.'
+        }),
+        common_1.Post('/create-store'),
+        common_1.HttpCode(common_1.HttpStatus.CREATED),
+        swagger_1.ApiCreatedResponse({}),
+        __param(0, common_1.Body())
+    ], UserController.prototype, "storeRegister");
     UserController = __decorate([
         common_1.Controller('user')
     ], UserController);

@@ -12,6 +12,8 @@ exports.ShopperSchema = new mongoose.Schema({
     },
     password: { type: String },
     username: { type: String },
+    age: { type: Number },
+    phoneNumber: { type: Number },
     role: {
         type: String,
         "default": role_enum_1.ROLE.shopper
@@ -22,10 +24,8 @@ exports.ShopperSchema = new mongoose.Schema({
     birthdate: {
         type: Date
     },
-    /*    nested: {
-          bankDetails : { owner : {type: String,}, cardNumber : {type: String} }
-       },
-     */
+    bankDetails: { owner: { type: String, "default": "" }, cardNumber: { type: String, "default": "" }, expirationDate: { type: Date, "default": new Date() } },
     // range in kilometer where the shopper can deliver 
-    range: { type: Array(2) }
+    range: { type: Number, "default": 0 },
+    address: { type: String, "default": "" }
 }, { timestamps: true });

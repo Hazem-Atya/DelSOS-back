@@ -10,6 +10,7 @@ exports.UserModule = void 0;
 var common_1 = require("@nestjs/common");
 var mongoose_1 = require("@nestjs/mongoose");
 var shopper_model_1 = require("./models/shopper.model");
+var store_model_1 = require("./models/store.model");
 var user_controller_1 = require("./user.controller");
 var user_service_1 = require("./user.service");
 var UserModule = /** @class */ (function () {
@@ -18,7 +19,8 @@ var UserModule = /** @class */ (function () {
     UserModule = __decorate([
         common_1.Module({
             imports: [
-                mongoose_1.MongooseModule.forFeature([{ name: 'Shopper', schema: shopper_model_1.ShopperSchema }])
+                mongoose_1.MongooseModule.forFeature([{ name: 'Shopper', schema: shopper_model_1.ShopperSchema }]),
+                mongoose_1.MongooseModule.forFeature([{ name: 'Store', schema: store_model_1.StoreSchema }])
             ],
             providers: [user_service_1.UserService],
             controllers: [user_controller_1.UserController]
