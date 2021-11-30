@@ -11,6 +11,11 @@ const config = new DocumentBuilder()
     .build();
     const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+  const corsOptions={
+    origin: ['http://localhost:4200']
+  };
+  app.enableCors(corsOptions);
   await app.listen(3000);
+
 }
 bootstrap();

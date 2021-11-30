@@ -31,5 +31,4 @@ export interface Admin extends mongoose.Document {
    password: string;
    role: string;
  
-
 }

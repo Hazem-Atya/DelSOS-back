@@ -12,8 +12,6 @@ import { UserModule } from './user/user.module';
     //MongooseModule.forRoot('mongodb+srv://riheme:riheme@delsos.lvvv0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
     
     
-  
-  
   ],
   controllers: [AppController],
   providers: [AppService],
