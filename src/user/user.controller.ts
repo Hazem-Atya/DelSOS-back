@@ -6,32 +6,26 @@ import { CreateStoreDto } from './DTO/storeCreation.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-  ) { }
+  constructor(private readonly userService: UserService) {}
   @ApiHeader({
     name: 'Bearer',
-    description: 'the token we need for auth.'
+    description: 'the token we need for auth.',
   })
   @Post('/create-shopper')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
   async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
-    //  return createShopperDto;
-    console.log(createShopperDto);
     return await this.userService.registerShopper(createShopperDto);
   }
 
   @ApiHeader({
     name: 'Bearer',
-    description: 'the token we need for auth.'
+    description: 'the token we need for auth.',
   })
   @Post('/create-store')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
   async storeRegister(@Body() createStoreDto: CreateStoreDto) {
-    //  return createShopperDto;
     return await this.userService.registerStore(createStoreDto);
   }
 }
-
