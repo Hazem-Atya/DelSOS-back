@@ -61,10 +61,11 @@ var common_1 = require("@nestjs/common");
 var mongoose_1 = require("@nestjs/mongoose");
 var bcrypt = require("bcrypt");
 var UserService = /** @class */ (function () {
-    function UserService(userModel) {
+    function UserService(userModel, storeModel) {
         this.userModel = userModel;
+        this.storeModel = storeModel;
     }
-    UserService.prototype.register = function (userData) {
+    UserService.prototype.registerShopper = function (userData) {
         return __awaiter(this, void 0, Promise, function () {
             var email, firstname, lastname, username, user, _a, e_1;
             return __generator(this, function (_b) {
@@ -74,7 +75,11 @@ var UserService = /** @class */ (function () {
                         firstname = userData.firstname;
                         lastname = userData.lastname;
                         username = firstname + "-" + lastname;
-                        return [4 /*yield*/, this.userModel.create(__assign(__assign({}, userData), { username: username }))];
+                        return [4 /*yield*/, this.userModel.create(__assign(__assign({}, userData), { username: username, bankDetails: {
+                                    owner: "",
+                                    number: "",
+                                    expirationdate: ""
+                                }, address: "" }))];
                     case 1:
                         user = _b.sent();
                         _a = user;
@@ -91,14 +96,45 @@ var UserService = /** @class */ (function () {
                     case 5:
                         e_1 = _b.sent();
                         throw new common_1.ConflictException("the email should be unique");
-                    case 6: return [2 /*return*/, "user created"];
+                    case 6: return [2 /*return*/, "shopper created"];
+                }
+            });
+        });
+    };
+    UserService.prototype.registerStore = function (userData) {
+        return __awaiter(this, void 0, Promise, function () {
+            var email, name, user, _a, e_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        email = userData.email;
+                        name = userData.name;
+                        return [4 /*yield*/, this.storeModel.create(__assign(__assign({}, userData), { address: [] }))];
+                    case 1:
+                        user = _b.sent();
+                        _a = user;
+                        return [4 /*yield*/, bcrypt.hash(user.password, 10)];
+                    case 2:
+                        _a.password = _b.sent();
+                        _b.label = 3;
+                    case 3:
+                        _b.trys.push([3, 5, , 6]);
+                        return [4 /*yield*/, user.save()];
+                    case 4:
+                        _b.sent();
+                        return [3 /*break*/, 6];
+                    case 5:
+                        e_2 = _b.sent();
+                        throw new common_1.ConflictException("the email should be unique");
+                    case 6: return [2 /*return*/, "store created"];
                 }
             });
         });
     };
     UserService = __decorate([
         common_1.Injectable(),
-        __param(0, mongoose_1.InjectModel('Shopper'))
+        __param(0, mongoose_1.InjectModel('Shopper')),
+        __param(1, mongoose_1.InjectModel('Store'))
     ], UserService);
     return UserService;
 }());

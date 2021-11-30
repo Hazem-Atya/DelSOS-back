@@ -1,9 +1,9 @@
 "use strict";
 exports.__esModule = true;
-exports.Store = void 0;
+exports.StoreSchema = void 0;
 var mongoose = require("mongoose");
 var role_enum_1 = require("./role.enum");
-exports.Store = new mongoose.Schema({
+exports.StoreSchema = new mongoose.Schema({
     name: { type: String },
     email: {
         type: String, required: true, lowercase: true,
@@ -18,5 +18,9 @@ exports.Store = new mongoose.Schema({
     },
     lastLogin: {
         type: Date
+    },
+    address: {
+        required: true,
+        type: Array()
     }
 }, { timestamps: true });

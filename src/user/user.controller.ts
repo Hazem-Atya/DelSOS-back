@@ -2,6 +2,7 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
+import { CreateStoreDto } from './DTO/storeCreation.dto';
 
 @Controller('user')
 export class UserController {
@@ -13,7 +14,18 @@ export class UserController {
   @Post('/create-shopper')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
-  async register(@Body() createShopperDto: CreateShopperDto) {
-    return await this.userService.register(createShopperDto);
+  async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
+    return await this.userService.registerShopper(createShopperDto);
+  }
+
+  @ApiHeader({
+    name: 'Bearer',
+    description: 'the token we need for auth.',
+  })
+  @Post('/create-store')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({})
+  async storeRegister(@Body() createStoreDto: CreateStoreDto) {
+    return await this.userService.registerStore(createStoreDto);
   }
 }
