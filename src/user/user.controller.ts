@@ -1,4 +1,12 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Redirect,
+  Res,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';

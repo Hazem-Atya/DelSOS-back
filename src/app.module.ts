@@ -4,16 +4,22 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
     UserModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://Riheme:riheme@delsos.lvvv0.mongodb.net/delsosDev',
-    ),
+
     AuthModule,
-    //MongooseModule.forRoot('mongodb://riheme:riheme@localhost:27017')
-    //MongooseModule.forRoot('mongodb+srv://riheme:riheme@delsos.lvvv0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // load: [
+      //   process.env.NODE_ENV == 'development'
+      //     ? configuration
+      //     : prodConfiguration,
+      // ],
+    }),
+    MongooseModule.forRoot(process.env.CONNECTION_STRING),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,8 +1,4 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
@@ -25,8 +21,16 @@ export class UserService {
     const firstname = userData.firstname;
     const lastname = userData.lastname;
     const username = `${firstname}-${lastname}`;
+
+    if (await this.userModel.findOne({ email })) {
+      return new ConflictException(`This email  is already used`);
+    }
+
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+
     const user = await this.userModel.create({
       ...userData,
+      password: hashedPassword,
       username,
       bankDetails: {
         owner: '',
@@ -35,33 +39,24 @@ export class UserService {
       },
       address: '',
     });
-    if (await this.userModel.findOne({ email })) {
-      return new ConflictException(`This email  is already used`);
-    }
-    user.password = await bcrypt.hash(user.password, 10);
-    try {
-      await user.save();
-    } catch (e) {
-      throw new InternalServerErrorException();
-    }
     return 'shopper created';
   }
 
   async registerStore(userData: CreateStoreDto): Promise<any> {
     const email = userData.email;
-    const user = await this.storeModel.create({
-      ...userData,
-      address: [],
-    });
+
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+
     if (await this.userModel.findOne({ email })) {
       return new ConflictException(`This email  is already used`);
     }
-    user.password = await bcrypt.hash(user.password, 10);
-    try {
-      await user.save();
-    } catch (e) {
-      throw new InternalServerErrorException();
-    }
+
+    const user = await this.storeModel.create({
+      ...userData,
+      password: hashedPassword,
+      address: [],
+    });
+
     return 'store created';
   }
 }
