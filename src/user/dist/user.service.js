@@ -74,6 +74,7 @@ var UserService = /** @class */ (function () {
                         email = userData.email;
                         name = userData.name;
                         username = name + "-" + Math.random().toString(36).substr(2, 9);
+                        console.log(username);
                         return [4 /*yield*/, this.userModel.findOne({ email: email })];
                     case 1:
                         if (_b.sent()) {
