@@ -19,8 +19,10 @@ export class UserService {
   
   async registerShopper(userData: CreateShopperDto): Promise<any> {
     const email = userData.email ;
+
     const name = userData.name ;
-    const username = `${name}-${Math.random().toString(36).substr(2, 9)}`;
+    const username = `${firstname}-${lastname}`;
+      
      if (await this.userModel.findOne({ email })) {
        
       throw new NotFoundException(`This email  is already used`);

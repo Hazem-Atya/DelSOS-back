@@ -9,7 +9,10 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     ) {}
-
+    @ApiHeader({
+      name: 'Bearer',
+      description: 'the token we need for auth.'
+  })
   @Post('/create-shopper')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
@@ -18,7 +21,10 @@ export class UserController {
       return await this.userService.registerShopper(createShopperDto);
     }
   
-
+    @ApiHeader({
+      name: 'Bearer',
+      description: 'the token we need for auth.'
+  })
   @Post('/create-store')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})

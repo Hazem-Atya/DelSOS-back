@@ -67,14 +67,13 @@ var UserService = /** @class */ (function () {
     }
     UserService.prototype.registerShopper = function (userData) {
         return __awaiter(this, void 0, Promise, function () {
-            var email, firstname, lastname, username, user, _a, e_1;
+            var email, name, username, user, _a, e_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         email = userData.email;
-                        firstname = userData.firstname;
-                        lastname = userData.lastname;
-                        username = firstname + "-" + lastname;
+                        name = userData.name;
+                        username = name + "-" + Math.random().toString(36).substr(2, 9);
                         return [4 /*yield*/, this.userModel.findOne({ email: email })];
                     case 1:
                         if (_b.sent()) {

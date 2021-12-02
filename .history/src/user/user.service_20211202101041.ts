@@ -21,6 +21,7 @@ export class UserService {
     const email = userData.email ;
     const name = userData.name ;
     const username = `${name}-${Math.random().toString(36).substr(2, 9)}`;
+      console
      if (await this.userModel.findOne({ email })) {
        
       throw new NotFoundException(`This email  is already used`);

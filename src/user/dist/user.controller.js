@@ -76,21 +76,15 @@ var UserController = /** @class */ (function () {
             });
         });
     };
+    UserController.prototype.getShopperById = function () {
+    };
     __decorate([
-        swagger_1.ApiHeader({
-            name: 'Bearer',
-            description: 'the token we need for auth.'
-        }),
         common_1.Post('/create-shopper'),
         common_1.HttpCode(common_1.HttpStatus.CREATED),
         swagger_1.ApiCreatedResponse({}),
         __param(0, common_1.Body())
     ], UserController.prototype, "shopperRregister");
     __decorate([
-        swagger_1.ApiHeader({
-            name: 'Bearer',
-            description: 'the token we need for auth.'
-        }),
         common_1.Post('/create-store'),
         common_1.HttpCode(common_1.HttpStatus.CREATED),
         swagger_1.ApiCreatedResponse({}),
