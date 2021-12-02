@@ -23,9 +23,9 @@ export class UserService {
     const lastname = userData.lastname ;
     const username = `${firstname}-${lastname}`;
       
-     if (await this.userModel.findOne({ email })) {
+    /* if (await this.userModel.findOne({ email })) {
        
-      throw new NotFoundException(`This email  is already used`);
+      throw new NotFoundException(`This email  is already used`, `This email is already used`);
     } 
        const user =  await this.userModel.create({
          ...userData,
@@ -53,10 +53,10 @@ export class UserService {
       const name = userData.name;
 
         
-    if (await this.storeModel.findOne({ email })) {
+      /* if (await this.storeModel.findOne({ email })) {
          
         throw new NotFoundException(`This email  is already used`, `This email is already used`);
-      } 
+      } */
          const user =  await this.storeModel.create({
            ...userData,
            address: []

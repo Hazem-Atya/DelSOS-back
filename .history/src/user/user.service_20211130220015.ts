@@ -22,7 +22,7 @@ export class UserService {
     const firstname = userData.firstname;
     const lastname = userData.lastname ;
     const username = `${firstname}-${lastname}`;
-      
+    try {   
      if (await this.userModel.findOne({ email })) {
        
       throw new NotFoundException(`This email  is already used`);
@@ -39,7 +39,7 @@ export class UserService {
       });
       
       user.password = await bcrypt.hash(user.password,10);
-      try {
+
         await user.save();
       } catch (e) {
         throw new ConflictException(`the email should be unique`);
@@ -53,10 +53,10 @@ export class UserService {
       const name = userData.name;
 
         
-    if (await this.storeModel.findOne({ email })) {
+      /* if (await this.storeModel.findOne({ email })) {
          
         throw new NotFoundException(`This email  is already used`, `This email is already used`);
-      } 
+      } */
          const user =  await this.storeModel.create({
            ...userData,
            address: []

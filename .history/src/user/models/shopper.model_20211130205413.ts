@@ -10,7 +10,7 @@ export const ShopperSchema = new mongoose.Schema({
 
    name: { type: String, },
    email: {
-      type: String, required: true, lowercase: true, unique: true,
+      type: String, required: true, lowercase: true,
       maxlength: 255,
       minlength: 6,
    },
@@ -52,5 +52,6 @@ export interface Shopper extends mongoose.Document {
    role: string;
    bankDetails: Object;
    range: Array<number>;
+
 
 }

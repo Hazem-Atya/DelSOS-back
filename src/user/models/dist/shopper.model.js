@@ -6,7 +6,7 @@ var mongoose = require("mongoose");
 exports.ShopperSchema = new mongoose.Schema({
     name: { type: String },
     email: {
-        type: String, required: true, lowercase: true,
+        type: String, required: true, lowercase: true, unique: true,
         maxlength: 255,
         minlength: 6
     },

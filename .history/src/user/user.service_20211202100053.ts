@@ -56,7 +56,7 @@ export class UserService {
     if (await this.storeModel.findOne({ email })) {
          
         throw new NotFoundException(`This email  is already used`, `This email is already used`);
-      } 
+      } */
          const user =  await this.storeModel.create({
            ...userData,
            address: []

@@ -23,19 +23,7 @@ var CreateShopperDto = /** @class */ (function () {
         class_validator_1.IsString(),
         class_validator_1.MinLength(5),
         class_validator_1.MaxLength(255)
-    ], CreateShopperDto.prototype, "firstname");
-    __decorate([
-        swagger_1.ApiProperty({
-            description: "The user's lastname",
-            format: 'string',
-            minLength: 6,
-            maxLength: 255
-        }),
-        class_validator_1.IsNotEmpty(),
-        class_validator_1.IsString(),
-        class_validator_1.MinLength(5),
-        class_validator_1.MaxLength(255)
-    ], CreateShopperDto.prototype, "lastname");
+    ], CreateShopperDto.prototype, "name");
     __decorate([
         swagger_1.ApiProperty({
             description: "The user's age",
@@ -74,12 +62,41 @@ var CreateShopperDto = /** @class */ (function () {
             minLength: 5,
             maxLength: 1024
         }),
-        swagger_1.ApiProperty(),
         class_validator_1.IsNotEmpty(),
         class_validator_1.IsString(),
         class_validator_1.MinLength(5),
         class_validator_1.MaxLength(1024)
     ], CreateShopperDto.prototype, "password");
+    __decorate([
+        swagger_1.ApiProperty({
+            description: "The name of the card's owner",
+            format: 'string',
+            minLength: 5,
+            maxLength: 255
+        }),
+        class_validator_1.IsNotEmpty(),
+        class_validator_1.IsString(),
+        class_validator_1.MinLength(5),
+        class_validator_1.MaxLength(255)
+    ], CreateShopperDto.prototype, "owner");
+    __decorate([
+        swagger_1.ApiProperty({
+            description: "the card's number ",
+            format: 'string',
+            minLength: 8
+        }),
+        class_validator_1.IsNotEmpty(),
+        class_validator_1.IsString(),
+        class_validator_1.MinLength(5)
+    ], CreateShopperDto.prototype, "cardNumber");
+    __decorate([
+        swagger_1.ApiProperty({
+            description: 'The expiration date of the card ',
+            format: 'date'
+        }),
+        class_validator_1.IsNotEmpty(),
+        class_validator_1.IsDate()
+    ], CreateShopperDto.prototype, "expirationDate");
     return CreateShopperDto;
 }());
 exports.CreateShopperDto = CreateShopperDto;

@@ -72,7 +72,7 @@ export class CreateShopperDto {
   @ApiProperty({
     description: "The name of the card's owner",
     format: 'string',
-    minLength: 5,
+    minLength: 6,
     maxLength: 255,
   })
   @IsNotEmpty()

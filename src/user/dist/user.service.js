@@ -75,28 +75,33 @@ var UserService = /** @class */ (function () {
                         firstname = userData.firstname;
                         lastname = userData.lastname;
                         username = firstname + "-" + lastname;
+                        return [4 /*yield*/, this.userModel.findOne({ email: email })];
+                    case 1:
+                        if (_b.sent()) {
+                            throw new common_1.NotFoundException("This email  is already used");
+                        }
                         return [4 /*yield*/, this.userModel.create(__assign(__assign({}, userData), { username: username, bankDetails: {
                                     owner: "",
                                     number: "",
                                     expirationdate: ""
                                 }, address: "" }))];
-                    case 1:
+                    case 2:
                         user = _b.sent();
                         _a = user;
                         return [4 /*yield*/, bcrypt.hash(user.password, 10)];
-                    case 2:
-                        _a.password = _b.sent();
-                        _b.label = 3;
                     case 3:
-                        _b.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, user.save()];
+                        _a.password = _b.sent();
+                        _b.label = 4;
                     case 4:
-                        _b.sent();
-                        return [3 /*break*/, 6];
+                        _b.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, user.save()];
                     case 5:
+                        _b.sent();
+                        return [3 /*break*/, 7];
+                    case 6:
                         e_1 = _b.sent();
                         throw new common_1.ConflictException("the email should be unique");
-                    case 6: return [2 /*return*/, "shopper created"];
+                    case 7: return [2 /*return*/, "shopper created"];
                 }
             });
         });
@@ -109,24 +114,29 @@ var UserService = /** @class */ (function () {
                     case 0:
                         email = userData.email;
                         name = userData.name;
-                        return [4 /*yield*/, this.storeModel.create(__assign(__assign({}, userData), { address: [] }))];
+                        return [4 /*yield*/, this.storeModel.findOne({ email: email })];
                     case 1:
+                        if (_b.sent()) {
+                            throw new common_1.NotFoundException("This email  is already used", "This email is already used");
+                        }
+                        return [4 /*yield*/, this.storeModel.create(__assign(__assign({}, userData), { address: [] }))];
+                    case 2:
                         user = _b.sent();
                         _a = user;
                         return [4 /*yield*/, bcrypt.hash(user.password, 10)];
-                    case 2:
-                        _a.password = _b.sent();
-                        _b.label = 3;
                     case 3:
-                        _b.trys.push([3, 5, , 6]);
-                        return [4 /*yield*/, user.save()];
+                        _a.password = _b.sent();
+                        _b.label = 4;
                     case 4:
-                        _b.sent();
-                        return [3 /*break*/, 6];
+                        _b.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, user.save()];
                     case 5:
+                        _b.sent();
+                        return [3 /*break*/, 7];
+                    case 6:
                         e_2 = _b.sent();
                         throw new common_1.ConflictException("the email should be unique");
-                    case 6: return [2 /*return*/, "store created"];
+                    case 7: return [2 /*return*/, "store created"];
                 }
             });
         });

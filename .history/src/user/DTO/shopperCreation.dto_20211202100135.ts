@@ -1,4 +1,4 @@
-import { IsNotEmpty, MinLength, MaxLength, IsEmail, IsString, IsDate } from 'class-validator';
+import { IsNotEmpty, MinLength, MaxLength, IsEmail, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateShopperDto {
@@ -66,42 +66,5 @@ export class CreateShopperDto {
     @MinLength(5)
     @MaxLength(1024)
   readonly password: string;
-
-  // bank card details
-
-  @ApiProperty({
-    description: "The name of the card's owner",
-    format: 'string',
-    minLength: 5,
-    maxLength: 255,
-  })
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(5)
-  @MaxLength(255)
-readonly owner: string;
-
-@ApiProperty({
-  description: "the card's number ",
-  format: 'string',
-  minLength: 8,
-
-})
-@IsNotEmpty()
-@IsString()
-@MinLength(5)
-
-readonly cardNumber: string;
-
-@ApiProperty({
-  description: 'The expiration date of the card ',
-  format: 'date',
-})
-@IsNotEmpty()
-@IsDate()
-readonly expirationDate: string;
-
-
-
   
   }
