@@ -1,4 +1,6 @@
 import {
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   PreconditionFailedException,
@@ -36,5 +38,24 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async createConfirmToken(payload: any) {
+    return this.jwtService.sign(payload);
+  }
+
+  async verifyConfirmToken(token: string) {
+    const payload = this.jwtService.verify(token);
+    const user = await this.userModel.findById(payload.sub);
+    if (user) {
+      await this.userModel.findByIdAndUpdate(
+        user._id,
+        {
+          confirmed: true,
+        },
+        { new: true },
+      );
+      throw new HttpException('Email confirmed', HttpStatus.OK);
+    }
   }
 }

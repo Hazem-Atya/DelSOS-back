@@ -7,26 +7,22 @@ import { Store } from 'src/user/models/store.model';
 
 @Injectable()
 export class MailService {
-  constructor(
-    private mailerService: MailerService,
-    @InjectModel('Shopper')
-    private readonly userModel: Model<Shopper>,
-    @InjectModel('Store')
-    private readonly storeModel: Model<Store>,
-  ) {}
+  constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: any, token: string) {
-    const url = `example.com/auth/confirm?token=${token}`;
+    const url = `http://localhost:3000/auth/confirm?token=${token}`;
 
-    await this.mailerService.sendMail({
+    const info = await this.mailerService.sendMail({
       to: user.email,
-      from: '"Support Team" <support@example.com>',
+      from: '"Support Team" <delsosinsat@gmail.com>',
       subject: 'Welcome to Nice App! Confirm your Email',
       template: './confirmation',
       context: {
-        name: user.name,
+        name: user.username,
         url,
       },
     });
+
+    return info;
   }
 }

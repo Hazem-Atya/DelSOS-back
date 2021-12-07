@@ -1,34 +1,33 @@
-
 import * as mongoose from 'mongoose';
 import { ROLE } from './role.enum';
 
-
-export const AdminSchema = new mongoose.Schema({
- 
-   email: {
-      type: String, required: true, lowercase: true,
+export const AdminSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      lowercase: true,
       maxlength: 255,
       minlength: 6,
-   },
-   password: { type: String,required: true  },
-   username: { type: String, },
+    },
+    password: { type: String, required: true },
+    username: { type: String },
 
-   role: {
+    role: {
       type: String,
       default: ROLE.admin,
-   },
+    },
 
-   lastLogin: {
+    lastLogin: {
       type: Date,
-   },
-
-}, { timestamps: true });
+    },
+  },
+  { timestamps: true },
+);
 
 export interface Admin extends mongoose.Document {
-
-   username: string;
-   email: string;
-   password: string;
-   role: string;
- 
+  username: string;
+  email: string;
+  password: string;
+  role: string;
 }

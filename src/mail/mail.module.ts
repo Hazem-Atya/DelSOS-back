@@ -3,33 +3,33 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
-import { MongooseModule } from '@nestjs/mongoose';
-import { ShopperSchema } from 'src/user/models/shopper.model';
-import { StoreSchema } from 'src/user/models/store.model';
+import { ConfigService } from '@nestjs/config/dist/config.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'Shopper', schema: ShopperSchema }]),
-    MongooseModule.forFeature([{ name: 'Store', schema: StoreSchema }]),
-    MailerModule.forRoot({
-      transport: {
-        host: 'smtp.example.com',
-        secure: false,
-        auth: {
-          user: 'user@example.com',
-          pass: 'topsecret',
+    MailerModule.forRootAsync({
+      useFactory: async (configService: ConfigService) => ({
+        transport: {
+          host: configService.get('SMTP_HOST'),
+          port: configService.get('SMTP_PORT'),
+          secure: configService.get('SECURE_CONNECTION'),
+          auth: {
+            user: configService.get('MAIL_USER'),
+            pass: configService.get('MAIL_PASSWORD'),
+          },
         },
-      },
-      defaults: {
-        from: '"No Reply" <noreply@example.com>',
-      },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
-        options: {
-          strict: true,
+        defaults: {
+          from: '"DelSOS Support Team" <delsosinsat@gmail.com>',
         },
-      },
+        template: {
+          dir: join(__dirname, 'templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   providers: [MailService],

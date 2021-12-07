@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from './auth-guards/jwt-auth.guard';
 import { LocalAuthGuard } from './auth-guards/local-auth.guard';
 import { AuthService } from './auth.service';
@@ -16,5 +16,10 @@ export class AuthController {
   @Get('/profile')
   async profile(@Req() req) {
     return 'profile page';
+  }
+
+  @Get('/confirm')
+  async confirmMail(@Query('token') token: string) {
+    return this.authService.verifyConfirmToken(token);
   }
 }
