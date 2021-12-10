@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateStoreDto {
 
     @ApiProperty({
-      description: 'The store name',
+      description: "The store's name",
       format: 'string',
       minLength: 6,
       maxLength: 255,
@@ -18,8 +18,8 @@ export class CreateStoreDto {
 
     // Email
     @ApiProperty({
-      example: 'hmed@gmail.com',
-      description: 'The email of the User',
+      example: 'store@gmail.com',
+      description: 'The email of the store',
       format: 'email',
       uniqueItems: true,
       minLength: 5,
@@ -34,8 +34,7 @@ export class CreateStoreDto {
 
     // Password
     @ApiProperty({
-      example: 'TIKTAK',
-      description: 'The password of the User',
+      description: 'The password of the store',
       format: 'string',
       minLength: 5,
       maxLength: 1024,

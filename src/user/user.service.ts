@@ -6,6 +6,8 @@ import { Shopper } from './models/shopper.model';
 import * as bcrypt from 'bcrypt';
 import { Store } from "./models/store.model";
 import { CreateStoreDto } from "./DTO/storeCreation.dto";
+import { JwtService } from "@nestjs/jwt";
+import { sign } from 'jsonwebtoken';
 
 @Injectable()
 export class UserService {
@@ -14,39 +16,52 @@ export class UserService {
     @InjectModel('Shopper') 
      private readonly userModel: Model<Shopper>,
      @InjectModel('Store')
-     private readonly storeModel: Model<Store>
+     private readonly storeModel: Model<Store>,
+     private jwtService: JwtService,
+
 ) {}
   
   async registerShopper(userData: CreateShopperDto): Promise<any> {
     const email = userData.email ;
-    const name = userData.name ;
-    const username = `${name}-${Math.random().toString(36).substr(2, 9)}`;
-    console.log(username);
+    const name = userData.name;
+    const phoneNumber = userData.phone;
+    const age = userData.age;
+    const username = `shopper-${name.split(' ').join('')}-delsos`;
+
      if (await this.userModel.findOne({ email })) {
        
       throw new NotFoundException(`This email  is already used`);
     } 
-       const user =  await this.userModel.create({
-         ...userData,
-         username, 
-         bankDetails: {
-           owner: "",
-           number:"",
-           expirationdate:""
-         }, 
-         address: ""
+
+      const password = await bcrypt.hash(userData.password, 10);
+      const user = await this.userModel.create({
+        name,
+        username,
+        email,
+        phoneNumber,
+        password,
+        age,
+        bankDetails: {
+          owner: userData.owner,
+          cardNumber: userData.cardNumber,
+          expirationdate: userData.expirationDate,
+        },
+        address: ""
       });
-      
-      user.password = await bcrypt.hash(user.password,10);
-      try {
-        await user.save();
-      } catch (e) {
-        throw new ConflictException(`the email should be unique`);
-      }
-    return "shopper created";
+
+    
+      const payload = { username: user.username, sub: user._id };
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
+  
+  
 
     }
  
+  
+  
+  
     async registerStore(userData: CreateStoreDto): Promise<any> {
       const email = userData.email ;
       const name = userData.name;

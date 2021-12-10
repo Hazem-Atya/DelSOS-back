@@ -3,3 +3,8 @@ export enum ROLE {
   'store' = 'STORE',
   'admin' = 'ADMIN'
 }
+
+export enum STATUS{
+  'activated' = "ACTIVATED", 
+  'deactivated'= "DEACTIVATED"
+}

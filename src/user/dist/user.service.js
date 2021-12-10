@@ -61,54 +61,57 @@ var common_1 = require("@nestjs/common");
 var mongoose_1 = require("@nestjs/mongoose");
 var bcrypt = require("bcrypt");
 var UserService = /** @class */ (function () {
-    function UserService(userModel, storeModel) {
+    function UserService(userModel, storeModel, jwtService) {
         this.userModel = userModel;
         this.storeModel = storeModel;
+        this.jwtService = jwtService;
     }
     UserService.prototype.registerShopper = function (userData) {
         return __awaiter(this, void 0, Promise, function () {
-            var email, name, username, user, _a, e_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var email, name, phoneNumber, age, username, password, user, payload;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         email = userData.email;
                         name = userData.name;
-                        username = name + "-" + Math.random().toString(36).substr(2, 9);
-                        console.log(username);
+                        phoneNumber = userData.phone;
+                        age = userData.age;
+                        username = "shopper-" + name.split(' ').join('') + "-delsos";
                         return [4 /*yield*/, this.userModel.findOne({ email: email })];
                     case 1:
-                        if (_b.sent()) {
+                        if (_a.sent()) {
                             throw new common_1.NotFoundException("This email  is already used");
                         }
-                        return [4 /*yield*/, this.userModel.create(__assign(__assign({}, userData), { username: username, bankDetails: {
-                                    owner: "",
-                                    number: "",
-                                    expirationdate: ""
-                                }, address: "" }))];
+                        return [4 /*yield*/, bcrypt.hash(userData.password, 10)];
                     case 2:
-                        user = _b.sent();
-                        _a = user;
-                        return [4 /*yield*/, bcrypt.hash(user.password, 10)];
+                        password = _a.sent();
+                        return [4 /*yield*/, this.userModel.create({
+                                name: name,
+                                username: username,
+                                email: email,
+                                phoneNumber: phoneNumber,
+                                password: password,
+                                age: age,
+                                bankDetails: {
+                                    owner: userData.owner,
+                                    cardNumber: userData.cardNumber,
+                                    expirationdate: userData.expirationDate
+                                },
+                                address: ""
+                            })];
                     case 3:
-                        _a.password = _b.sent();
-                        _b.label = 4;
-                    case 4:
-                        _b.trys.push([4, 6, , 7]);
-                        return [4 /*yield*/, user.save()];
-                    case 5:
-                        _b.sent();
-                        return [3 /*break*/, 7];
-                    case 6:
-                        e_1 = _b.sent();
-                        throw new common_1.ConflictException("the email should be unique");
-                    case 7: return [2 /*return*/, "shopper created"];
+                        user = _a.sent();
+                        payload = { username: user.username, sub: user._id };
+                        return [2 /*return*/, {
+                                access_token: this.jwtService.sign(payload)
+                            }];
                 }
             });
         });
     };
     UserService.prototype.registerStore = function (userData) {
         return __awaiter(this, void 0, Promise, function () {
-            var email, name, user, _a, e_2;
+            var email, name, user, _a, e_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -134,7 +137,7 @@ var UserService = /** @class */ (function () {
                         _b.sent();
                         return [3 /*break*/, 7];
                     case 6:
-                        e_2 = _b.sent();
+                        e_1 = _b.sent();
                         throw new common_1.ConflictException("the email should be unique");
                     case 7: return [2 /*return*/, "store created"];
                 }

@@ -1,6 +1,6 @@
 
 import * as mongoose from 'mongoose';
-import { ROLE } from './role.enum';
+import { ROLE } from './enum';
 
 
 export const AdminSchema = new mongoose.Schema({

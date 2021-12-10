@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import { ROLE } from './role.enum';
+import { ROLE, STATUS } from './enum';
 
 export const StoreSchema = new mongoose.Schema(
   {
@@ -27,6 +27,11 @@ export const StoreSchema = new mongoose.Schema(
       required: true,
       type: Array<string>(),
     },
+
+    status: {
+      type: String,
+      default: STATUS.deactivated
+    }
   },
   { timestamps: true },
 );
@@ -38,4 +43,5 @@ export interface Store extends mongoose.Document {
   password: string;
   role: string;
   address: Array<string>;
+  status: string
 }

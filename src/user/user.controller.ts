@@ -16,6 +16,7 @@ import { CreateStoreDto } from './DTO/storeCreation.dto';
 export class UserController {
   constructor(
     private readonly userService: UserService,
+    
     ) {}
 
   @Post('/create-shopper')

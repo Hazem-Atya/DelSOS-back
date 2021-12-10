@@ -6,32 +6,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 exports.__esModule = true;
-exports.UserModule = void 0;
+exports.AccountModule = void 0;
 var common_1 = require("@nestjs/common");
-var jwt_1 = require("@nestjs/jwt");
 var mongoose_1 = require("@nestjs/mongoose");
-var shopper_model_1 = require("./models/shopper.model");
-var store_model_1 = require("./models/store.model");
-var user_controller_1 = require("./user.controller");
-var user_service_1 = require("./user.service");
-var UserModule = /** @class */ (function () {
-    function UserModule() {
+var shopper_model_1 = require("src/user/models/shopper.model");
+var store_model_1 = require("src/user/models/store.model");
+var account_controller_1 = require("./account.controller");
+var account_service_1 = require("./account.service");
+var AccountModule = /** @class */ (function () {
+    function AccountModule() {
     }
-    UserModule = __decorate([
+    AccountModule = __decorate([
         common_1.Module({
             imports: [
                 mongoose_1.MongooseModule.forFeature([{ name: 'Shopper', schema: shopper_model_1.ShopperSchema }]),
                 mongoose_1.MongooseModule.forFeature([{ name: 'Store', schema: store_model_1.StoreSchema }]),
-                jwt_1.JwtModule.register({
-                    secret: process.env.SECRET,
-                    signOptions: { expiresIn: '24h' }
-                }),
             ],
-            providers: [user_service_1.UserService],
-            controllers: [user_controller_1.UserController],
-            exports: [user_service_1.UserService]
+            providers: [account_service_1.AccountService],
+            controllers: [account_controller_1.AccountController]
         })
-    ], UserModule);
-    return UserModule;
+    ], AccountModule);
+    return AccountModule;
 }());
-exports.UserModule = UserModule;
+exports.AccountModule = AccountModule;

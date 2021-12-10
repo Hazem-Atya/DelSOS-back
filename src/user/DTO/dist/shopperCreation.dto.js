@@ -56,7 +56,6 @@ var CreateShopperDto = /** @class */ (function () {
     ], CreateShopperDto.prototype, "email");
     __decorate([
         swagger_1.ApiProperty({
-            example: 'TIKTAK',
             description: 'The password of the User',
             format: 'string',
             minLength: 5,

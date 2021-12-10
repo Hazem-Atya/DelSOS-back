@@ -1,5 +1,5 @@
 
-import { ROLE } from './role.enum';
+import { ROLE } from './enum';
 import * as mongoose from 'mongoose';
 
 import { Prop, Schema } from '@nestjs/mongoose';

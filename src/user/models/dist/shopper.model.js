@@ -1,7 +1,7 @@
 "use strict";
 exports.__esModule = true;
 exports.ShopperSchema = void 0;
-var role_enum_1 = require("./role.enum");
+var enum_1 = require("./enum");
 var mongoose = require("mongoose");
 exports.ShopperSchema = new mongoose.Schema({
     name: { type: String },
@@ -16,7 +16,7 @@ exports.ShopperSchema = new mongoose.Schema({
     phoneNumber: { type: Number },
     role: {
         type: String,
-        "default": role_enum_1.ROLE.shopper
+        "default": enum_1.ROLE.shopper
     },
     lastLogin: {
         type: Date

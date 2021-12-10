@@ -1,0 +1,11 @@
+# node:12 it is an official image of the node which can be found in the docker hub.
+FROM node:12
+WORKDIR /app
+ADD package.json /app/package.json
+RUN npm install
+# runn npm install inside our work directory 
+ADD . /app
+# we expose the 3000 port in the container so that it can communicate with the outside of the container. 
+# it will depend on which port your application is running on. for nests usually it’s 3000
+EXPOSE 3000
+CMD ["npm", "run", "start"]
