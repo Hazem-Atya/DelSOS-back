@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class ForgotPasswordDto {
   @ApiProperty({
-    example: 'secret password change me!',
+    example: 'i am the new secret password',
     description: 'The new password of the User',
     format: 'string',
     minLength: 5,
@@ -16,7 +16,7 @@ export class ForgotPasswordDto {
   readonly newPassword: string;
 
   @ApiProperty({
-    example: 'secret password change me!',
+    example: 'i am the new secret password',
     description: 'The confirmed new password of the User',
     format: 'string',
     minLength: 5,

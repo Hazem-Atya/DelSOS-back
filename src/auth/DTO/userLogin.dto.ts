@@ -24,7 +24,7 @@ export class LoginUserDto {
   readonly email: string;
 
   @ApiProperty({
-    example: 'secret password change me!',
+    example: 'secret password',
     description: 'The password of the User',
     format: 'string',
     minLength: 5,
