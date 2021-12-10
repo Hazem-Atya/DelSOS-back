@@ -17,15 +17,15 @@ import { MailModule } from 'src/mail/mail.module';
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
-        secretOrKeyProvider: (requestType: JwtSecretRequestType) => {
-          switch (requestType) {
-            case JwtSecretRequestType.SIGN:
-              return configService.get('SIGN_SECRET');
-            case JwtSecretRequestType.VERIFY:
-              return configService.get('VERIFY_SECRET');
-          }
-        },
-        signOptions: { expiresIn: '24h' },
+        secret: configService.get('SIGN_SECRET'),
+        // secretOrKeyProvider: (requestType: JwtSecretRequestType) => {
+        //   switch (requestType) {
+        //     case JwtSecretRequestType.SIGN:
+        //       return configService.get('SIGN_SECRET');
+        //     case JwtSecretRequestType.VERIFY:
+        //       return configService.get('VERIFY_SECRET');
+        //   }
+        // },
       }),
       inject: [ConfigService],
     }),

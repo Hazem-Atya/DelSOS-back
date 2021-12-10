@@ -1,4 +1,11 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  PreconditionFailedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
@@ -8,6 +15,8 @@ import { Store } from './models/store.model';
 import { CreateStoreDto } from './DTO/storeCreation.dto';
 import { MailService } from 'src/mail/mail.service';
 import { AuthService } from 'src/auth/auth.service';
+import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -18,6 +27,7 @@ export class UserService {
     private readonly storeModel: Model<Store>,
     private readonly mailService: MailService,
     private readonly authService: AuthService,
+    private readonly configService: ConfigService,
   ) {}
 
   async registerShopper(userData: CreateShopperDto): Promise<any> {
@@ -29,9 +39,8 @@ export class UserService {
     if (await this.userModel.findOne({ email })) {
       throw new ConflictException(`This email  is already used`);
     }
-
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(userData.password, salt);
     const user = await this.userModel.create({
       ...userData,
       password: hashedPassword,
@@ -44,20 +53,26 @@ export class UserService {
       address: '',
     });
 
-    const confirmToken = await this.authService.createConfirmToken({
-      username: user.username,
-      sub: user._id,
-    });
+    const confirmToken = await this.authService.createToken(
+      {
+        email: email,
+        sub: user._id,
+      },
+      this.configService.get('CONFIRM_TOKEN_EXPIRATION'),
+    );
 
     const info = await this.mailService.sendUserConfirmation(
       {
         email: user.email,
         username: user.username,
       },
-      confirmToken,
+      confirmToken.access_token,
     );
 
-    return 'shopper created';
+    throw new HttpException(
+      'Shopper Created ! Check ur Mail for confirmation',
+      HttpStatus.OK,
+    );
   }
 
   async registerStore(userData: CreateStoreDto): Promise<any> {
@@ -76,5 +91,52 @@ export class UserService {
     });
 
     return 'store created';
+  }
+
+  async forgotPassword(email: string) {
+    const user = await this.userModel.findOne({ email });
+    if (!user) throw new NotFoundException();
+
+    const forgotToken = await this.authService.createToken(
+      {
+        email,
+        sub: user._id,
+        creationDate: new Date(),
+      },
+      this.configService.get('RESET_TOKEN_EXPIRATION'),
+    );
+
+    const info = await this.mailService.sendPasswordReset(
+      {
+        email: user.email,
+        username: user.username,
+      },
+      forgotToken.access_token,
+    );
+
+    throw new HttpException(
+      "Check ur mail for reset password link ! it won't last long !! ",
+      HttpStatus.OK,
+    );
+  }
+
+  async resetPassword(passwordInfo: ForgotPasswordDto, user) {
+    const { newPassword, confirmPassword } = passwordInfo;
+
+    if (newPassword !== confirmPassword)
+      throw new PreconditionFailedException();
+
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await this.userModel.findByIdAndUpdate(
+      user._id,
+      {
+        password: hashedPassword,
+      },
+      { new: true },
+    );
+
+    throw new HttpException('Password updated successfully ! ', HttpStatus.OK);
   }
 }

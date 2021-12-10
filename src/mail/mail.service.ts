@@ -1,25 +1,35 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Shopper } from 'src/user/models/shopper.model';
-import { Store } from 'src/user/models/store.model';
+import { URLS } from './URL/url-object';
 
 @Injectable()
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async sendUserConfirmation(user: any, token: string) {
-    const url = `http://localhost:3000/auth/confirm?token=${token}`;
-
     const info = await this.mailerService.sendMail({
       to: user.email,
       from: '"Support Team" <delsosinsat@gmail.com>',
-      subject: 'Welcome to Nice App! Confirm your Email',
+      subject: 'Welcome to DelSOS! Confirm your Email',
       template: './confirmation',
       context: {
         name: user.username,
-        url,
+        url: URLS.confirmMail(token),
+      },
+    });
+
+    return info;
+  }
+
+  async sendPasswordReset(user: any, resetToken: string) {
+    const info = await this.mailerService.sendMail({
+      to: user.email,
+      from: '"Support Team" <delsosinsat@gmail.com>',
+      subject: 'This is ur password reset code ! ',
+      template: './resetPassword',
+      context: {
+        name: user.username,
+        url: URLS.forgotPasswordMail(resetToken),
       },
     });
 

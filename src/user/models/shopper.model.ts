@@ -1,8 +1,6 @@
 import { ROLE } from './role.enum';
 import * as mongoose from 'mongoose';
 
-import { Prop, Schema } from '@nestjs/mongoose';
-
 export const ShopperSchema = new mongoose.Schema(
   {
     name: { type: String },
@@ -16,7 +14,7 @@ export const ShopperSchema = new mongoose.Schema(
     password: { type: String },
     username: { type: String },
     age: { type: Number },
-    phoneNumber: { type: Number },
+    phoneNumber: { type: String },
     role: {
       type: String,
       default: ROLE.shopper,
@@ -39,7 +37,7 @@ export const ShopperSchema = new mongoose.Schema(
 
     address: { type: String, default: '' },
 
-    confirmed: { type: Boolean, default: 'false' },
+    isConfirmed: { type: Boolean, default: 'false' },
   },
   { timestamps: true },
 );
@@ -50,10 +48,10 @@ export interface Shopper extends mongoose.Document {
   email: string;
   password: string;
   age: number;
-  phoneNumber: number;
+  phoneNumber: string;
   role: string;
   bankDetails: Object;
   range: Array<number>;
   address: string;
-  confirmed: boolean;
+  isConfirmed: boolean;
 }
