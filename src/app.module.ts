@@ -7,11 +7,11 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './admin/account/account.module';
 import { DeliveryModule } from './admin/delivery/delivery.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
     UserModule,
-
     AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
@@ -24,6 +24,7 @@ import { DeliveryModule } from './admin/delivery/delivery.module';
     MongooseModule.forRoot(process.env.CONNECTION_STRING),
     AccountModule,
     DeliveryModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

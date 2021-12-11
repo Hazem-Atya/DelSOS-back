@@ -14,14 +14,13 @@ var CreateShopperDto = /** @class */ (function () {
     }
     __decorate([
         swagger_1.ApiProperty({
-            description: 'The name of the User',
+            description: "The user's name",
             format: 'string',
             minLength: 6,
             maxLength: 255
         }),
         class_validator_1.IsNotEmpty(),
         class_validator_1.IsString(),
-        class_validator_1.MinLength(5),
         class_validator_1.MaxLength(255)
     ], CreateShopperDto.prototype, "name");
     __decorate([
@@ -38,7 +37,7 @@ var CreateShopperDto = /** @class */ (function () {
         }),
         class_validator_1.IsNotEmpty(),
         class_validator_1.MinLength(8)
-    ], CreateShopperDto.prototype, "phone");
+    ], CreateShopperDto.prototype, "phoneNumber");
     __decorate([
         swagger_1.ApiProperty({
             example: 'flen@gmail.com',
@@ -56,11 +55,13 @@ var CreateShopperDto = /** @class */ (function () {
     ], CreateShopperDto.prototype, "email");
     __decorate([
         swagger_1.ApiProperty({
+            example: 'TIKTAK',
             description: 'The password of the User',
             format: 'string',
             minLength: 5,
             maxLength: 1024
         }),
+        swagger_1.ApiProperty(),
         class_validator_1.IsNotEmpty(),
         class_validator_1.IsString(),
         class_validator_1.MinLength(5),
@@ -93,8 +94,7 @@ var CreateShopperDto = /** @class */ (function () {
             description: 'The expiration date of the card ',
             format: 'date'
         }),
-        class_validator_1.IsNotEmpty(),
-        class_validator_1.IsDate()
+        class_validator_1.IsNotEmpty()
     ], CreateShopperDto.prototype, "expirationDate");
     return CreateShopperDto;
 }());

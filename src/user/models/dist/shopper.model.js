@@ -6,14 +6,16 @@ var mongoose = require("mongoose");
 exports.ShopperSchema = new mongoose.Schema({
     name: { type: String },
     email: {
-        type: String, required: true, lowercase: true, unique: true,
+        type: String,
+        required: true,
+        lowercase: true,
         maxlength: 255,
         minlength: 6
     },
     password: { type: String },
     username: { type: String },
     age: { type: Number },
-    phoneNumber: { type: Number },
+    phoneNumber: { type: String },
     role: {
         type: String,
         "default": enum_1.ROLE.shopper
@@ -24,8 +26,13 @@ exports.ShopperSchema = new mongoose.Schema({
     birthdate: {
         type: Date
     },
-    bankDetails: { owner: { type: String, "default": "" }, cardNumber: { type: String, "default": "" }, expirationDate: { type: Date, "default": new Date() } },
-    // range in kilometer where the shopper can deliver 
+    bankDetails: {
+        owner: { type: String, "default": '' },
+        cardNumber: { type: String, "default": '' },
+        expirationDate: { type: Date, "default": new Date() }
+    },
+    // range in kilometer where the shopper can deliver
     range: { type: Number, "default": 0 },
-    address: { type: String, "default": "" }
+    address: { type: String, "default": '' },
+    isConfirmed: { type: Boolean, "default": 'false' }
 }, { timestamps: true });

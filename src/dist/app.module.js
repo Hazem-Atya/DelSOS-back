@@ -12,6 +12,11 @@ var mongoose_1 = require("@nestjs/mongoose");
 var app_controller_1 = require("./app.controller");
 var app_service_1 = require("./app.service");
 var user_module_1 = require("./user/user.module");
+var auth_module_1 = require("./auth/auth.module");
+var config_1 = require("@nestjs/config");
+var account_module_1 = require("./admin/account/account.module");
+var delivery_module_1 = require("./admin/delivery/delivery.module");
+var mail_module_1 = require("./mail/mail.module");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -19,9 +24,14 @@ var AppModule = /** @class */ (function () {
         common_1.Module({
             imports: [
                 user_module_1.UserModule,
-                mongoose_1.MongooseModule.forRoot('mongodb+srv://Riheme:riheme@delsos.lvvv0.mongodb.net/delsosDev')
-                //MongooseModule.forRoot('mongodb://riheme:riheme@localhost:27017')
-                //MongooseModule.forRoot('mongodb+srv://riheme:riheme@delsos.lvvv0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+                auth_module_1.AuthModule,
+                config_1.ConfigModule.forRoot({
+                    isGlobal: true
+                }),
+                mongoose_1.MongooseModule.forRoot(process.env.CONNECTION_STRING),
+                account_module_1.AccountModule,
+                delivery_module_1.DeliveryModule,
+                mail_module_1.MailModule,
             ],
             controllers: [app_controller_1.AppController],
             providers: [app_service_1.AppService]

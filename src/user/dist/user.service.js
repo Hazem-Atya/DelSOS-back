@@ -61,50 +61,53 @@ var common_1 = require("@nestjs/common");
 var mongoose_1 = require("@nestjs/mongoose");
 var bcrypt = require("bcrypt");
 var UserService = /** @class */ (function () {
-    function UserService(userModel, storeModel, jwtService) {
+    function UserService(userModel, storeModel, mailService, authService, configService) {
         this.userModel = userModel;
         this.storeModel = storeModel;
-        this.jwtService = jwtService;
+        this.mailService = mailService;
+        this.authService = authService;
+        this.configService = configService;
     }
     UserService.prototype.registerShopper = function (userData) {
         return __awaiter(this, void 0, Promise, function () {
-            var email, name, phoneNumber, age, username, password, user, payload;
+            var email, name, username, salt, hashedPassword, user, confirmToken, info;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         email = userData.email;
                         name = userData.name;
-                        phoneNumber = userData.phone;
-                        age = userData.age;
                         username = "shopper-" + name.split(' ').join('') + "-delsos";
                         return [4 /*yield*/, this.userModel.findOne({ email: email })];
                     case 1:
                         if (_a.sent()) {
-                            throw new common_1.NotFoundException("This email  is already used");
+                            throw new common_1.ConflictException("This email  is already used");
                         }
-                        return [4 /*yield*/, bcrypt.hash(userData.password, 10)];
+                        return [4 /*yield*/, bcrypt.genSalt()];
                     case 2:
-                        password = _a.sent();
-                        return [4 /*yield*/, this.userModel.create({
-                                name: name,
-                                username: username,
-                                email: email,
-                                phoneNumber: phoneNumber,
-                                password: password,
-                                age: age,
-                                bankDetails: {
-                                    owner: userData.owner,
-                                    cardNumber: userData.cardNumber,
-                                    expirationdate: userData.expirationDate
-                                },
-                                address: ""
-                            })];
+                        salt = _a.sent();
+                        return [4 /*yield*/, bcrypt.hash(userData.password, salt)];
                     case 3:
+                        hashedPassword = _a.sent();
+                        return [4 /*yield*/, this.userModel.create(__assign(__assign({}, userData), { password: hashedPassword, username: username, bankDetails: {
+                                    owner: '',
+                                    number: '',
+                                    expirationdate: ''
+                                }, address: '' }))];
+                    case 4:
                         user = _a.sent();
-                        payload = { username: user.username, sub: user._id };
-                        return [2 /*return*/, {
-                                access_token: this.jwtService.sign(payload)
-                            }];
+                        return [4 /*yield*/, this.authService.createToken({
+                                email: email,
+                                sub: user._id
+                            }, this.configService.get('CONFIRM_TOKEN_EXPIRATION'))];
+                    case 5:
+                        confirmToken = _a.sent();
+                        return [4 /*yield*/, this.mailService.sendUserConfirmation({
+                                email: user.email,
+                                username: user.username
+                            }, confirmToken.access_token)];
+                    case 6:
+                        info = _a.sent();
+                        throw new common_1.HttpException('Shopper Created ! Check ur Mail for confirmation', common_1.HttpStatus.OK);
                 }
             });
         });
@@ -140,6 +143,59 @@ var UserService = /** @class */ (function () {
                         e_1 = _b.sent();
                         throw new common_1.ConflictException("the email should be unique");
                     case 7: return [2 /*return*/, "store created"];
+                }
+            });
+        });
+    };
+    UserService.prototype.forgotPassword = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, forgotToken, info;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userModel.findOne({ email: email })];
+                    case 1:
+                        user = _a.sent();
+                        if (!user)
+                            throw new common_1.NotFoundException();
+                        return [4 /*yield*/, this.authService.createToken({
+                                email: email,
+                                sub: user._id,
+                                creationDate: new Date()
+                            }, this.configService.get('RESET_TOKEN_EXPIRATION'))];
+                    case 2:
+                        forgotToken = _a.sent();
+                        return [4 /*yield*/, this.mailService.sendPasswordReset({
+                                email: user.email,
+                                username: user.username
+                            }, forgotToken.access_token)];
+                    case 3:
+                        info = _a.sent();
+                        throw new common_1.HttpException("Check ur mail for reset password link ! it won't last long !! ", common_1.HttpStatus.OK);
+                }
+            });
+        });
+    };
+    UserService.prototype.resetPassword = function (passwordInfo, user) {
+        return __awaiter(this, void 0, void 0, function () {
+            var newPassword, confirmPassword, salt, hashedPassword;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        newPassword = passwordInfo.newPassword, confirmPassword = passwordInfo.confirmPassword;
+                        if (newPassword !== confirmPassword)
+                            throw new common_1.PreconditionFailedException();
+                        return [4 /*yield*/, bcrypt.genSalt()];
+                    case 1:
+                        salt = _a.sent();
+                        return [4 /*yield*/, bcrypt.hash(newPassword, salt)];
+                    case 2:
+                        hashedPassword = _a.sent();
+                        return [4 /*yield*/, this.userModel.findByIdAndUpdate(user._id, {
+                                password: hashedPassword
+                            }, { "new": true })];
+                    case 3:
+                        _a.sent();
+                        throw new common_1.HttpException('Password updated successfully ! ', common_1.HttpStatus.OK);
                 }
             });
         });
