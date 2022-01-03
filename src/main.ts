@@ -18,6 +18,6 @@ async function bootstrap() {
   app.enableCors(corsOptions);
   app.use(morgan('dev'));
   await app.listen(3000);
-
 }
+
 bootstrap();

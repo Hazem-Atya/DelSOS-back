@@ -15,6 +15,8 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
   async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
+    console.log(createShopperDto);
+    
     return await this.userService.registerShopper(createShopperDto);
   }
 
@@ -26,6 +28,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
   async storeRegister(@Body() createStoreDto: CreateStoreDto) {
+    
     return await this.userService.registerStore(createStoreDto);
   }
 }

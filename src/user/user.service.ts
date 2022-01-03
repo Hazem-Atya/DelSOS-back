@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
@@ -14,12 +14,18 @@ export class UserService {
     private readonly userModel: Model<Shopper>,
     @InjectModel('Store')
     private readonly storeModel: Model<Store>,
-  ) {}
+  ) { }
 
   async registerShopper(userData: CreateShopperDto): Promise<any> {
     const firstname = userData.firstname;
     const lastname = userData.lastname;
     const username = `${firstname}-${lastname}`;
+    const email = userData.email;
+    if (await this.userModel.findOne({ email })) {
+
+      throw new ConflictException(`This email  is already used`, `This email is already used`);
+      
+    }
     const user = await this.userModel.create({
       ...userData,
       username,
@@ -35,9 +41,9 @@ export class UserService {
     try {
       await user.save();
     } catch (e) {
-      throw new ConflictException(`the email should be unique`);
+      return  new InternalServerErrorException();
     }
-    return 'shopper created';
+    return user;
   }
 
   async registerStore(userData: CreateStoreDto): Promise<any> {
