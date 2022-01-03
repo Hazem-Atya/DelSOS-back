@@ -1,21 +1,33 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtSecretRequestType } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
 import { ShopperSchema } from 'src/user/models/shopper.model';
 import { AuthService } from './auth.service';
-import { jwtConstants } from './constants';
 import { JwtStrategy } from './auth-strategies/jwt.strategy';
 import { LocalStrategy } from './auth-strategies/local.strategy';
 import { AuthController } from './auth.controller';
+import { ConfigService } from '@nestjs/config';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
+    MailModule,
     MongooseModule.forFeature([{ name: 'Shopper', schema: ShopperSchema }]),
     PassportModule,
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '24h' },
+    JwtModule.registerAsync({
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('SIGN_SECRET'),
+        // secretOrKeyProvider: (requestType: JwtSecretRequestType) => {
+        //   switch (requestType) {
+        //     case JwtSecretRequestType.SIGN:
+        //       return configService.get('SIGN_SECRET');
+        //     case JwtSecretRequestType.VERIFY:
+        //       return configService.get('VERIFY_SECRET');
+        //   }
+        // },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],

@@ -1,34 +1,63 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiHeader, ApiTags } from '@nestjs/swagger';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
 import { CreateStoreDto } from './DTO/storeCreation.dto';
+import { EmailDto } from 'src/auth/DTO/email.dto';
+import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
+import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
+import { GetUser } from 'src/auth/decorators/user.decorator';
 
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-  @ApiHeader({
-    name: 'Bearer',
-    description: 'the token we need for auth.',
-  })
   @Post('/create-shopper')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
-  async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
-    console.log(createShopperDto);
+    async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
+    //  return createShopperDto;
+      return await this.userService.registerShopper(createShopperDto);
+    }
+  
+
+  @Post('/create-store')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({})
+    async storeRegister(@Body() createStoreDto: CreateStoreDto) {
+    //  return createShopperDto;
+      return await this.userService.registerStore(createStoreDto);
+    }
+  
+  getShopperById() {
     
-    return await this.userService.registerShopper(createShopperDto);
+  }
+
+  @Post('/forgot-password')
+  @ApiCreatedResponse({})
+  async forgotPassword(@Body() emailInfo: EmailDto) {
+    return await this.userService.forgotPassword(emailInfo.email);
   }
 
   @ApiHeader({
     name: 'Bearer',
-    description: 'the token we need for auth.',
+    description: 'the token we need for authentification.',
   })
-  @Post('/create-store')
-  @HttpCode(HttpStatus.CREATED)
+  @UseGuards(JwtAuthGuard)
+  @Post('/reset-password')
   @ApiCreatedResponse({})
-  async storeRegister(@Body() createStoreDto: CreateStoreDto) {
-    
-    return await this.userService.registerStore(createStoreDto);
+  async resetPassword(
+    @Body() passwordInfo: ForgotPasswordDto,
+    @GetUser() user,
+  ) {
+    return await this.userService.resetPassword(passwordInfo, user);
   }
 }

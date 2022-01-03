@@ -48,6 +48,8 @@ exports.__esModule = true;
 exports.UserController = void 0;
 var common_1 = require("@nestjs/common");
 var swagger_1 = require("@nestjs/swagger");
+var jwt_auth_guard_1 = require("src/auth/auth-guards/jwt-auth.guard");
+var user_decorator_1 = require("src/auth/decorators/user.decorator");
 var UserController = /** @class */ (function () {
     function UserController(userService) {
         this.userService = userService;
@@ -76,27 +78,58 @@ var UserController = /** @class */ (function () {
             });
         });
     };
+    UserController.prototype.getShopperById = function () {
+    };
+    UserController.prototype.forgotPassword = function (emailInfo) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userService.forgotPassword(emailInfo.email)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    UserController.prototype.resetPassword = function (passwordInfo, user) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.userService.resetPassword(passwordInfo, user)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
     __decorate([
-        swagger_1.ApiHeader({
-            name: 'Bearer',
-            description: 'the token we need for auth.'
-        }),
         common_1.Post('/create-shopper'),
         common_1.HttpCode(common_1.HttpStatus.CREATED),
         swagger_1.ApiCreatedResponse({}),
         __param(0, common_1.Body())
     ], UserController.prototype, "shopperRregister");
     __decorate([
-        swagger_1.ApiHeader({
-            name: 'Bearer',
-            description: 'the token we need for auth.'
-        }),
         common_1.Post('/create-store'),
         common_1.HttpCode(common_1.HttpStatus.CREATED),
         swagger_1.ApiCreatedResponse({}),
         __param(0, common_1.Body())
     ], UserController.prototype, "storeRegister");
+    __decorate([
+        common_1.Post('/forgot-password'),
+        swagger_1.ApiCreatedResponse({}),
+        __param(0, common_1.Body())
+    ], UserController.prototype, "forgotPassword");
+    __decorate([
+        swagger_1.ApiHeader({
+            name: 'Bearer',
+            description: 'the token we need for authentification.'
+        }),
+        common_1.UseGuards(jwt_auth_guard_1.JwtAuthGuard),
+        common_1.Post('/reset-password'),
+        swagger_1.ApiCreatedResponse({}),
+        __param(0, common_1.Body()),
+        __param(1, user_decorator_1.GetUser())
+    ], UserController.prototype, "resetPassword");
     UserController = __decorate([
+        swagger_1.ApiTags('user'),
         common_1.Controller('user')
     ], UserController);
     return UserController;

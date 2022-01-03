@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 exports.__esModule = true;
 exports.UserModule = void 0;
 var common_1 = require("@nestjs/common");
+var jwt_1 = require("@nestjs/jwt");
 var mongoose_1 = require("@nestjs/mongoose");
 var shopper_model_1 = require("./models/shopper.model");
 var store_model_1 = require("./models/store.model");
@@ -20,10 +21,15 @@ var UserModule = /** @class */ (function () {
         common_1.Module({
             imports: [
                 mongoose_1.MongooseModule.forFeature([{ name: 'Shopper', schema: shopper_model_1.ShopperSchema }]),
-                mongoose_1.MongooseModule.forFeature([{ name: 'Store', schema: store_model_1.StoreSchema }])
+                mongoose_1.MongooseModule.forFeature([{ name: 'Store', schema: store_model_1.StoreSchema }]),
+                jwt_1.JwtModule.register({
+                    secret: process.env.SECRET,
+                    signOptions: { expiresIn: '24h' }
+                }),
             ],
             providers: [user_service_1.UserService],
-            controllers: [user_controller_1.UserController]
+            controllers: [user_controller_1.UserController],
+            exports: [user_service_1.UserService]
         })
     ], UserModule);
     return UserModule;
