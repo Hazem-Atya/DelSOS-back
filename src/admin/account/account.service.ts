@@ -7,60 +7,36 @@ import { Shopper, ShopperSchema } from "src/user/models/shopper.model";
 import { Store } from "src/user/models/store.model";
 import * as bcrypt from 'bcrypt';
 import { Password } from "src/user/DTO/password.dto";
+import { CrudService } from "src/utils/crud.service";
 @Injectable()
 export class AccountService {
-
 
   constructor(
     @InjectModel('Shopper')
     private readonly shopperModel: Model<Shopper>,
     @InjectModel('Store')
     private readonly storeModel: Model<Store>,
-   
-
+    private readonly crudService: CrudService,
   ) { }
+ 
 
 
+//--------------------------------- SHOPPER MANAGEMENT --------------------------------- //
   async getAll(): Promise<Shopper[]> {
     return await this.shopperModel.find();
   }
 
   async updateShopper(newShopper: Shopper): Promise<any> {
-    
-    if (newShopper) {
-      let shopper: Promise<UpdateResult>;
-      shopper = this.shopperModel.updateOne({ _id: newShopper._id }, newShopper).exec();
- 
-      if (!shopper) throw new NotFoundException('Could not found this shopper');
-    
-      return newShopper
-    }
-    return "new shopper not valid ";
+   return this.crudService.update(this.shopperModel, newShopper);
   }
 
   async updateShopperPassword(password: Password, id: string): Promise<any> {
-
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password.password, salt);
-
-    let shopper: UpdateResult;
-    shopper = await this.shopperModel.updateOne({ _id: id }, { password: hashedPassword }).exec();
-    
-    if (!shopper) throw new NotFoundException('Could not found this shopper');
-    
-    return `password updated successfully`;
+    return this.crudService.updatePassword(this.shopperModel, password.password, id);
   }
   
-  async deleteShopper(id: String): Promise<any> {
-
-    const shopper = await this.shopperModel.findByIdAndDelete(id).exec();
-
-    if (!shopper) throw new NotFoundException('Shopper not found');
-
-    return shopper
-
+  async deleteShopper(id: string): Promise<any> {
+    return this.crudService.delete(this.shopperModel, id);
   }
-
 
 
   //--------------------------------- STORE MANAGEMENT --------------------------------- //
@@ -68,6 +44,18 @@ export class AccountService {
   async getAllStores(): Promise<Store[]> {
 
     return await this.storeModel.find();
+  }
+
+  async updateStore(newStore: Store): Promise<any> {
+    return this.crudService.update(this.storeModel, newStore);
+  }
+
+  updatePasswordStore(newPassword: Password, id: string): any {
+    return this.crudService.updatePassword(this.storeModel, newPassword.password, id);
+  }
+
+  async deleteStore(id: string)  {
+    return this.crudService.delete(this.storeModel, id);
   }
 
 
@@ -82,21 +70,5 @@ export class AccountService {
       throw new NotFoundException('store no found')
     }
   }
-
-
-  async updateStore(newStore: Store): Promise<any> {
-
-    let store; 
-
-    store = await this.storeModel.updateOne({ _id: newStore.id }, newStore);
-   
-    if (!store) throw new NotFoundException('Could not found this store');
-    
-    
-    return store
-  }
-
-
-
 
 }

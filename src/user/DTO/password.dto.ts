@@ -4,5 +4,5 @@ export class Password{
   @IsNotEmpty()
   @IsString()
   @MinLength(8)
-  readonly password: {type: string , default : ""};
+  readonly password: string;
 }

@@ -14,7 +14,11 @@ export class AccountController {
     
   ) { } 
   
-
+/***
+ * 
+ * SHOPPERS
+ * 
+ */
   @Get('/shoppers')
   async getAllShoppers() : Promise<Shopper[]>{
     return this.accountService.getAll();
@@ -33,10 +37,16 @@ export class AccountController {
 }
 
   @Delete('/delete-shopper/:id')
-  async deleteShopper(@Param('id') id: String): Promise<any> { 
+  async deleteShopper(@Param('id') id: string): Promise<any> { 
     
     return this.accountService.deleteShopper(id);
- }
+  }
+  
+/***
+ * 
+ * STORES
+ * 
+ */
 
  @Get('/stores')
   async getAllStores() : Promise<Store[]>{
@@ -52,7 +62,14 @@ export class AccountController {
    async updateStore(@Body() newStore: Store): Promise<any> {
     return this.accountService.updateStore(newStore);
   }
- /* deleteStore() {
-    
-  } */
+
+  @Post('/update-password-store/:id')
+  async updatePasswordStore(@Param('id') id: string, @Body() newPassword: Password): Promise<any> { 
+    //return newPassword
+   return this.accountService.updatePasswordStore(newPassword, id);
+}
+@Delete('/delete-store/:id')
+  deleteStore(@Param('id') id : string ) {
+  return this.accountService.deleteStore(id);
+  } 
 }
