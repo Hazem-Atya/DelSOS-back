@@ -47,4 +47,5 @@ export class CreateStoreDto {
   readonly password: string;
   
 
+
   }

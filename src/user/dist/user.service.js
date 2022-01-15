@@ -70,45 +70,8 @@ var UserService = /** @class */ (function () {
     }
     UserService.prototype.registerShopper = function (userData) {
         return __awaiter(this, void 0, Promise, function () {
-            var email, name, username, salt, hashedPassword, user, confirmToken, info;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        email = userData.email;
-                        name = userData.name;
-                        username = "shopper-" + name.split(' ').join('') + "-delsos";
-                        return [4 /*yield*/, this.userModel.findOne({ email: email })];
-                    case 1:
-                        if (_a.sent()) {
-                            throw new common_1.ConflictException("This email  is already used");
-                        }
-                        return [4 /*yield*/, bcrypt.genSalt()];
-                    case 2:
-                        salt = _a.sent();
-                        return [4 /*yield*/, bcrypt.hash(userData.password, salt)];
-                    case 3:
-                        hashedPassword = _a.sent();
-                        return [4 /*yield*/, this.userModel.create(__assign(__assign({}, userData), { password: hashedPassword, username: username, bankDetails: {
-                                    owner: '',
-                                    number: '',
-                                    expirationdate: ''
-                                }, address: '' }))];
-                    case 4:
-                        user = _a.sent();
-                        return [4 /*yield*/, this.authService.createToken({
-                                email: email,
-                                sub: user._id
-                            }, this.configService.get('CONFIRM_TOKEN_EXPIRATION'))];
-                    case 5:
-                        confirmToken = _a.sent();
-                        return [4 /*yield*/, this.mailService.sendUserConfirmation({
-                                email: user.email,
-                                username: user.username
-                            }, confirmToken.access_token)];
-                    case 6:
-                        info = _a.sent();
-                        throw new common_1.HttpException('Shopper Created ! Check ur Mail for confirmation', common_1.HttpStatus.OK);
-                }
+                return [2 /*return*/];
             });
         });
     };

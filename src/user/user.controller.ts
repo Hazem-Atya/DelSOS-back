@@ -19,12 +19,12 @@ import { GetUser } from 'src/auth/decorators/user.decorator';
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
+  
   @Post('/create-shopper')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
-    async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
-    //  return createShopperDto;
+  async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
       return await this.userService.registerShopper(createShopperDto);
     }
   
@@ -33,7 +33,7 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
     async storeRegister(@Body() createStoreDto: CreateStoreDto) {
-    //  return createShopperDto;
+    //  return createStoreDto;
       return await this.userService.registerStore(createStoreDto);
     }
   

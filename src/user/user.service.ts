@@ -41,18 +41,19 @@ export class UserService {
     }
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(userData.password, salt);
-    const user = await this.userModel.create({
+  const user = await this.userModel.create({
       ...userData,
       password: hashedPassword,
       username,
       bankDetails: {
-        owner: '',
-        number: '',
-        expirationdate: '',
+        owner: userData.owner,
+        cardNumber: userData.cardNumber,
+        expirationdate: userData.expirationDate,
       },
-      address: '',
-    });
-
+      
+  });
+   
+ 
     const confirmToken = await this.authService.createToken(
       {
         email: email,
@@ -69,7 +70,7 @@ export class UserService {
       confirmToken.access_token,
     );
 
-    throw new HttpException(
+   throw new HttpException(
       'Shopper Created ! Check ur Mail for confirmation',
       HttpStatus.OK,
     );

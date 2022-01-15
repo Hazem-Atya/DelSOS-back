@@ -27,14 +27,23 @@ export class CreateShopperDto {
   })
   @IsNotEmpty()
   readonly age: number;
-
+  @ApiProperty({
+    description: "The user's address",
+    format: 'string',
+    minLength: 6,
+    maxLength: 255,
+  })
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(255)
+  readonly address: string;
   @ApiProperty({
     description: "The user's phone number ",
     format: 'Number',
   })
   @IsNotEmpty()
   @MinLength(8)
-  readonly phoneNumber: number;
+  readonly phoneNumber: string;
 
   // Email
   @ApiProperty({
@@ -90,9 +99,9 @@ readonly owner: string;
 @IsNotEmpty()
 @IsString()
 @MinLength(5)
-
 readonly cardNumber: string;
 
+  
 @ApiProperty({
   description: 'The expiration date of the card ',
   format: 'date',
@@ -100,4 +109,5 @@ readonly cardNumber: string;
 @IsNotEmpty()
 readonly expirationDate: string;
 
+  
 }
