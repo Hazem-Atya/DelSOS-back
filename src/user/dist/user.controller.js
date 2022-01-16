@@ -57,12 +57,8 @@ var UserController = /** @class */ (function () {
     UserController.prototype.shopperRregister = function (createShopperDto) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.userService.registerShopper(createShopperDto)];
-                    case 1: 
-                    //  return createShopperDto;
-                    return [2 /*return*/, _a.sent()];
-                }
+                console.log("hello");
+                return [2 /*return*/, createShopperDto];
             });
         });
     };
@@ -72,7 +68,7 @@ var UserController = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.userService.registerStore(createStoreDto)];
                     case 1: 
-                    //  return createShopperDto;
+                    //  return createStoreDto;
                     return [2 /*return*/, _a.sent()];
                 }
             });

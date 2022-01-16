@@ -13,9 +13,8 @@ export class CreateStoreDto {
     @IsString()
     @MinLength(5)
     @MaxLength(255)
-  readonly name: string;
+    readonly name: string;
   
-
     // Email
     @ApiProperty({
       example: 'store@gmail.com',
@@ -31,20 +30,24 @@ export class CreateStoreDto {
     @MaxLength(255)
     @IsEmail()
     readonly email: string;
+   // website
+   @ApiProperty({
+    example: 'www.websitename.com',
+    description: 'The website of the store',
+    format: 'Link',
+    uniqueItems: true,
+    minLength: 5,
+    maxLength: 255,
+  })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(5)
+  @MaxLength(255)
+  readonly website: string;
 
-    // Password
-    @ApiProperty({
-      description: 'The password of the store',
-      format: 'string',
-      minLength: 5,
-      maxLength: 1024,
-    })
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    @MinLength(5)
-    @MaxLength(1024)
-  readonly password: string;
+
+
   
+
 
   }

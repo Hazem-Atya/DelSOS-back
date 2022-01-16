@@ -32,6 +32,17 @@ var CreateShopperDto = /** @class */ (function () {
     ], CreateShopperDto.prototype, "age");
     __decorate([
         swagger_1.ApiProperty({
+            description: "The user's address",
+            format: 'string',
+            minLength: 6,
+            maxLength: 255
+        }),
+        class_validator_1.IsNotEmpty(),
+        class_validator_1.IsString(),
+        class_validator_1.MaxLength(255)
+    ], CreateShopperDto.prototype, "address");
+    __decorate([
+        swagger_1.ApiProperty({
             description: "The user's phone number ",
             format: 'Number'
         }),

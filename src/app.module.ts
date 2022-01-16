@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AccountModule } from './admin/account/account.module';
 import { DeliveryModule } from './admin/delivery/delivery.module';
 import { MailModule } from './mail/mail.module';
+import { UtilsModule } from './utils/utils.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { MailModule } from './mail/mail.module';
     AccountModule,
     DeliveryModule,
     MailModule,
+    UtilsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
