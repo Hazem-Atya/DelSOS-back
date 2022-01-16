@@ -15,8 +15,10 @@ export const StoreSchema = new mongoose.Schema(
     password: { type: String },
     username: { type: String },
     source: {
-      filename: { type: String, required: true },
-      mimetype: { type: String, required: true }
+      filename: { type: String, required: false },
+      mimetype: { type: String, required: false }, 
+      path: { type: String},
+      originalname: {type: String}
     },
     website: {type: String},
     role: {

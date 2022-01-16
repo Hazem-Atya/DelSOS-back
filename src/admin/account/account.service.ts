@@ -9,6 +9,9 @@ import * as bcrypt from 'bcrypt';
 import { Password } from "src/user/DTO/password.dto";
 import { CrudService } from "src/utils/crud.service";
 import { Injector } from "@nestjs/core/injector/injector";
+import { MailService } from "src/mail/mail.service";
+import { v4 as uuidv4 } from 'uuid';
+import { Exception } from "handlebars";
 @Injectable()
 export class AccountService {
 
@@ -18,6 +21,7 @@ export class AccountService {
     @InjectModel('Store')
     private readonly storeModel: Model<Store>,
     private readonly crudService: CrudService,
+    private readonly mailService: MailService
   ) { }
  
 
@@ -66,17 +70,28 @@ export class AccountService {
   }
 
 
-  async activate(id: string): Promise<Store> {
+  async activate(id: string): Promise<any> {
   
     const store = await this.storeModel.findById(id);
     
     if (store) {
       store.status = STATUS.activated;
       store.save();
+      const mail = await this.mailService.activateStore({
+        name: store.name, 
+        username: store.username, 
+        password : uuidv4()
+      })
+      console.log(mail)
+      if (!mail) return "mail not sent"
+        //throw new Exception('mail not sent')
       return store
     } else {
       throw new NotFoundException('store no found')
     }
+
+
+
   }
 
 }

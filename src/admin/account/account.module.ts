@@ -6,6 +6,7 @@ import { CrudService } from 'src/utils/crud.service';
 import { UtilsModule } from 'src/utils/utils.module';
 import { AccountController } from './account.controller';
 import { AccountService } from './account.service';
+import { MailModule } from '../../mail/mail.module';
 
 
 @Module({
@@ -13,6 +14,7 @@ import { AccountService } from './account.service';
     MongooseModule.forFeature([{ name: 'Shopper', schema: ShopperSchema }]),
     MongooseModule.forFeature([{ name: 'Store', schema: StoreSchema }]),
     UtilsModule,
+    MailModule,
   ],
   providers: [AccountService],
   controllers: [AccountController]

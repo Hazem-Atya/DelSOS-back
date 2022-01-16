@@ -79,10 +79,12 @@ export class UserService {
 
   async registerStore(file : Express.Multer.File, userData: CreateStoreDto): Promise<any> {
     const email = userData.email;
-
+    const username = `store-${userData.name.split(' ').join('')}-delsos`;
     const source = {
       filename: file.filename,
-      mimetype : file.mimetype
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+      path: file.path
     }
 
     if (await this.storeModel.findOne({ email })) {
@@ -91,6 +93,7 @@ export class UserService {
     }
     const user = await this.storeModel.create({
       ...userData,
+      username,
       source,
       address: []
     });
