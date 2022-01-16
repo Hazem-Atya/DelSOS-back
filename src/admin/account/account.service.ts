@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { UpdateResult } from "mongodb";
 import { Model } from "mongoose";
@@ -8,6 +8,7 @@ import { Store } from "src/user/models/store.model";
 import * as bcrypt from 'bcrypt';
 import { Password } from "src/user/DTO/password.dto";
 import { CrudService } from "src/utils/crud.service";
+import { Injector } from "@nestjs/core/injector/injector";
 @Injectable()
 export class AccountService {
 
@@ -58,8 +59,15 @@ export class AccountService {
     return this.crudService.delete(this.storeModel, id);
   }
 
+  async getPartnershipRequests(): Promise<any> {
+    let stores = await this.storeModel.find({ 'status': 'DEACTIVATED' });
+    if (!stores)  throw new NotFoundException('NOT FOUND')
+    return stores
+  }
 
-  async activate(id: String): Promise<Store> {
+
+  async activate(id: string): Promise<Store> {
+  
     const store = await this.storeModel.findById(id);
     
     if (store) {

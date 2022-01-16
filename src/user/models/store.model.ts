@@ -12,9 +12,13 @@ export const StoreSchema = new mongoose.Schema(
       minlength: 6,
       unique: true,
     },
-    password: { type: String, required: true },
+    password: { type: String },
     username: { type: String },
-
+    source: {
+      filename: { type: String, required: true },
+      mimetype: { type: String, required: true }
+    },
+    website: {type: String},
     role: {
       type: String,
       default: ROLE.store,
@@ -41,6 +45,8 @@ export interface Store extends mongoose.Document {
   username: string;
   email: string;
   password: string;
+  website: string;
+  file: Express.Multer.File;
   role: string;
   address: Array<string>;
   status: string

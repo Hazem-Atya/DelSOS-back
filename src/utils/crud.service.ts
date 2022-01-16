@@ -28,7 +28,7 @@ export class CrudService {
       let row: Promise<UpdateResult>;
       row = model.updateOne({ _id: newData._id }, newData).exec();
  
-      if (!row) throw new NotFoundException('Could not found this user');
+      if (!row) throw new NotFoundException('NOT FOUND');
     
       return row
     }

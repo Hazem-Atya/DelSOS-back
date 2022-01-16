@@ -20,6 +20,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
+
   constructor(
     @InjectModel('Shopper')
     private readonly userModel: Model<Shopper>,
@@ -30,7 +31,7 @@ export class UserService {
     private readonly configService: ConfigService,
   ) { }
 
-  
+
   async registerShopper(userData: CreateShopperDto): Promise<any> {
     const email = userData.email;
     const name = userData.name;
@@ -41,7 +42,7 @@ export class UserService {
     }
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(userData.password, salt);
-  const user = await this.userModel.create({
+    const user = await this.userModel.create({
       ...userData,
       password: hashedPassword,
       username,
@@ -50,10 +51,10 @@ export class UserService {
         cardNumber: userData.cardNumber,
         expirationdate: userData.expirationDate,
       },
-      
-  });
-   
- 
+
+    });
+
+
     const confirmToken = await this.authService.createToken(
       {
         email: email,
@@ -70,35 +71,37 @@ export class UserService {
       confirmToken.access_token,
     );
 
-   throw new HttpException(
+    throw new HttpException(
       'Shopper Created ! Check ur Mail for confirmation',
       HttpStatus.OK,
     );
   }
 
-  async registerStore(userData: CreateStoreDto): Promise<any> {
-
+  async registerStore(file : Express.Multer.File, userData: CreateStoreDto): Promise<any> {
     const email = userData.email;
-    const name = userData.name;
 
-        
+    const source = {
+      filename: file.filename,
+      mimetype : file.mimetype
+    }
+
     if (await this.storeModel.findOne({ email })) {
-         
+
       throw new NotFoundException(`This email  is already used`, `This email is already used`);
     }
     const user = await this.storeModel.create({
       ...userData,
+      source,
       address: []
     });
-        
-    user.password = await bcrypt.hash(user.password, 10);
+
     try {
       await user.save();
     } catch (e) {
       throw new ConflictException(`the email should be unique`);
     }
     return "store created";
-  
+
   }
 
   async forgotPassword(email: string) {
@@ -146,5 +149,12 @@ export class UserService {
     );
 
     throw new HttpException('Password updated successfully ! ', HttpStatus.OK);
+  }
+
+  async getShopper(id: string) {
+    return await this.userModel.findById(id);
+  }
+  async getStore(id: string) {
+    return await  this.storeModel.findById(id);
   }
 }
