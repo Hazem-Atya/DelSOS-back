@@ -21,6 +21,21 @@ export class MailService {
     return info;
   }
 
+  async activateStore(store: any) {
+    const info = await this.mailerService.sendMail({
+      to: store.email,
+      from: '"Support Team" <delsosinsat@gmail.com>',
+      subject: 'Welcome to DelSOS! Your account is activated',
+      template: './activation',
+      context: {
+        name: store.username,
+        username: store.username,
+        password: store.password,
+      },
+    });
+    return info;
+  }
+
   async sendPasswordReset(user: any, resetToken: string) {
     const info = await this.mailerService.sendMail({
       to: user.email,
