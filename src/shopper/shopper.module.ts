@@ -3,24 +3,23 @@ import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from 'src/auth/auth.module';
 import { MailModule } from 'src/mail/mail.module';
+import { UtilsModule } from 'src/utils/utils.module';
 import { ShopperSchema } from './models/shopper.model';
-import { StoreSchema } from './models/store.model';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
+import { ShopperController } from './shopper.controller';
+import { ShopperService } from './shopper.service';
 
 @Module({
   imports: [
     AuthModule,
     MailModule,
+    UtilsModule,
     MongooseModule.forFeature([{ name: 'Shopper', schema: ShopperSchema }]),
-    MongooseModule.forFeature([{ name: 'Store', schema: StoreSchema }]),
     JwtModule.register({
       secret: process.env.SECRET,
       signOptions: { expiresIn: '24h' },
     }),
   ],
-  providers: [UserService],
-  controllers: [UserController],
-  exports: [UserService],
+  providers: [ShopperService],
+  controllers: [ShopperController]
 })
-export class UserModule {}
+export class ShopperModule {}

@@ -12,11 +12,15 @@ import { ConfigService } from '@nestjs/config/dist/config.service';
         transport: {
           host: configService.get('SMTP_HOST'),
           port: configService.get('SMTP_PORT'),
-          secure: configService.get('SECURE_CONNECTION'),
+          //secure: configService.get('SECURE_CONNECTION'),
+          secure: true,
           auth: {
             user: configService.get('MAIL_USER'),
             pass: configService.get('MAIL_PASSWORD'),
           },
+          tls: {
+            rejectUnauthorized: false
+        }
         },
         defaults: {
           from: '"DelSOS Support Team" <delsosinsat@gmail.com>',

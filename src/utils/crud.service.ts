@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Model } from "mongoose";
-import { Shopper } from "src/user/models/shopper.model";
-import { Store } from "src/user/models/store.model";
+import { Store } from "src/store/models/store.model";
 import * as bcrypt from 'bcrypt';
 import { UpdateResult } from "mongodb";
+import { Shopper } from "src/shopper/models/shopper.model";
 
 @Injectable()
 export class CrudService {
@@ -23,7 +23,7 @@ export class CrudService {
    */
 
   
-  async update(model: Model<any>,newData : Shopper|Store) {
+  async update(model: Model<any>,newData : Partial<Shopper|Store>) {
     if (newData) {
       let row: Promise<UpdateResult>;
       row = model.updateOne({ _id: newData._id }, newData).exec();
@@ -51,7 +51,6 @@ export class CrudService {
     
     return `password updated successfully`;
   }
-
 
     /**
    * 

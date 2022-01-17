@@ -2,18 +2,17 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
-import { AccountModule } from './admin/account/account.module';
-import { DeliveryModule } from './admin/delivery/delivery.module';
+
 import { MailModule } from './mail/mail.module';
 import { UtilsModule } from './utils/utils.module';
+import { ShopperModule } from './shopper/shopper.module';
+import { StoreModule } from './store/store.module';
+import { DeliveryModule } from './delivery/delivery.module';
 
 @Module({
   imports: [
-    UserModule,
-    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       // load: [
@@ -23,10 +22,13 @@ import { UtilsModule } from './utils/utils.module';
       // ],
     }),
     MongooseModule.forRoot(process.env.CONNECTION_STRING),
-    AccountModule,
-    DeliveryModule,
     MailModule,
     UtilsModule,
+    AuthModule,
+    ShopperModule,
+    StoreModule,
+    DeliveryModule,
+
   ],
   controllers: [AppController],
   providers: [AppService],
