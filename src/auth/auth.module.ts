@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { JwtModule, JwtSecretRequestType } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { PassportModule } from '@nestjs/passport';
-import { ShopperSchema } from 'src/user/models/shopper.model';
+
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './auth-strategies/jwt.strategy';
 import { LocalStrategy } from './auth-strategies/local.strategy';
 import { AuthController } from './auth.controller';
 import { ConfigService } from '@nestjs/config';
 import { MailModule } from 'src/mail/mail.module';
+import { ShopperSchema } from 'src/shopper/models/shopper.model';
 
 @Module({
   imports: [

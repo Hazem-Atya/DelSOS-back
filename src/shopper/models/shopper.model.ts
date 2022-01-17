@@ -1,4 +1,4 @@
-import { ROLE } from './enum';
+import { ROLE } from '../../utils/enum';
 import * as mongoose from 'mongoose';
 
 export const ShopperSchema = new mongoose.Schema(
