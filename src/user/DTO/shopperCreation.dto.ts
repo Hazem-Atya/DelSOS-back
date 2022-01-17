@@ -49,7 +49,11 @@ export class CreateShopperDto {
   @IsString()
   @MinLength(5)
   @MaxLength(255)
-  @IsEmail()
+  @IsEmail({},
+    {
+      message:"Please type a correct email"
+    }
+  )
   readonly email: string;
 
     
@@ -84,11 +88,10 @@ readonly owner: string;
 @ApiProperty({
   description: "the card's number ",
   format: 'string',
-  minLength: 8,
+  minLength: 5,
 
 })
 @IsNotEmpty()
-@IsString()
 @MinLength(5)
 
 readonly cardNumber: string;
