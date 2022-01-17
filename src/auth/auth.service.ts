@@ -125,5 +125,4 @@ export class AuthService {
 
     throw new HttpException('Password updated successfully ! ', HttpStatus.OK);
   }
-
 }

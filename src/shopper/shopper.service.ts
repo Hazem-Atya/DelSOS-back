@@ -3,7 +3,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -17,7 +16,7 @@ import { Password } from 'src/auth/DTO/password.dto';
 import { CrudService } from 'src/utils/crud.service';
 
 @Injectable()
-export class ShopperService{
+export class ShopperService {
   constructor(
     @InjectModel('Shopper')
     private readonly shopperModel: Model<Shopper>,
@@ -25,8 +24,7 @@ export class ShopperService{
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
     private readonly crudService: CrudService,
-  ) { }
-
+  ) {}
 
   async registerShopper(userData: CreateShopperDto): Promise<any> {
     const email = userData.email;
@@ -47,7 +45,6 @@ export class ShopperService{
         cardNumber: userData.cardNumber,
         expirationdate: userData.expirationDate,
       },
-
     });
 
     const confirmToken = await this.authService.createToken(
@@ -72,7 +69,6 @@ export class ShopperService{
     );
   }
 
- 
   async getShopper(id: string) {
     return await this.shopperModel.findById(id);
   }
@@ -82,15 +78,18 @@ export class ShopperService{
   }
 
   async updateShopper(newShopper: Partial<Shopper>): Promise<any> {
-   return this.crudService.update(this.shopperModel, newShopper);
+    return this.crudService.update(this.shopperModel, newShopper);
   }
 
   async updateShopperPassword(password: Password, id: string): Promise<any> {
-    return this.crudService.updatePassword(this.shopperModel, password.password, id);
+    return this.crudService.updatePassword(
+      this.shopperModel,
+      password.password,
+      id,
+    );
   }
-  
+
   async deleteShopper(id: string): Promise<any> {
     return this.crudService.delete(this.shopperModel, id);
   }
-
 }
