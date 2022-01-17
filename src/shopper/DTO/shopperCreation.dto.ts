@@ -8,7 +8,6 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateShopperDto {
-
   //name
   @ApiProperty({
     description: "The user's name",
@@ -27,7 +26,7 @@ export class CreateShopperDto {
   })
   @IsNotEmpty()
   readonly age: number;
-  
+
   @ApiProperty({
     description: "The user's address",
     format: 'string',
@@ -62,7 +61,6 @@ export class CreateShopperDto {
   @IsEmail()
   readonly email: string;
 
-    
   // Password
   @ApiProperty({
     example: 'TIKTAK',
@@ -89,26 +87,22 @@ export class CreateShopperDto {
   @IsString()
   @MinLength(5)
   @MaxLength(255)
-readonly owner: string;
+  readonly owner: string;
 
-@ApiProperty({
-  description: "the card's number ",
-  format: 'string',
-  minLength: 8,
+  @ApiProperty({
+    description: "the card's number ",
+    format: 'string',
+    minLength: 8,
+  })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(5)
+  readonly cardNumber: string;
 
-})
-@IsNotEmpty()
-@IsString()
-@MinLength(5)
-readonly cardNumber: string;
-
-  
-@ApiProperty({
-  description: 'The expiration date of the card ',
-  format: 'date',
-})
-@IsNotEmpty()
-readonly expirationDate: string;
-
-  
+  @ApiProperty({
+    description: 'The expiration date of the card ',
+    format: 'date',
+  })
+  @IsNotEmpty()
+  readonly expirationDate: string;
 }

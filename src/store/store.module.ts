@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from 'src/auth/auth.module';
@@ -10,9 +11,10 @@ import { StoreService } from './store.service';
 
 @Module({
   imports: [
-  AuthModule,
+    AuthModule,
     MailModule,
     UtilsModule,
+    ConfigModule,
     MongooseModule.forFeature([{ name: 'Store', schema: StoreSchema }]),
     JwtModule.register({
       secret: process.env.SECRET,
@@ -20,6 +22,6 @@ import { StoreService } from './store.service';
     }),
   ],
   controllers: [StoreController],
-  providers: [StoreService]
+  providers: [StoreService],
 })
 export class StoreModule {}

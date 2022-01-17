@@ -1,7 +1,23 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
+import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
+import { GetUser } from 'src/auth/decorators/user.decorator';
+import { EmailDto } from 'src/auth/DTO/email.dto';
+import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { Password } from 'src/auth/DTO/password.dto';
 import { editFileName } from 'src/utils/constants';
 import { CreateStoreDto } from './DTO/storeCreation.dto';
@@ -10,20 +26,22 @@ import { StoreService } from './store.service';
 
 @Controller('store')
 export class StoreController {
-
-  constructor(private readonly storeService: StoreService) {
-
-  }
+  constructor(private readonly storeService: StoreService) {}
   @Post('/create-store')
-  @UseInterceptors(FileInterceptor('file', {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: editFileName,
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
     }),
-  }))
+  )
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
-  async storeRegister(@UploadedFile() file: Express.Multer.File, @Body() createStoreDto: CreateStoreDto) {
+  async storeRegister(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createStoreDto: CreateStoreDto,
+  ) {
     return await this.storeService.registerStore(file, createStoreDto);
   }
 
@@ -34,11 +52,9 @@ export class StoreController {
   @Get('/all')
   async getAllStores(): Promise<Store[]> {
     return this.storeService.getAllStores();
-
   }
   @Get('/activate/:id')
   async activateStore(@Param('id') id: string): Promise<any> {
-
     return this.storeService.activate(id);
   }
 
@@ -48,7 +64,10 @@ export class StoreController {
   }
 
   @Post('/update-password/:id')
-  async updatePasswordStore(@Param('id') id: string, @Body() newPassword: Password): Promise<any> {
+  async updatePasswordStore(
+    @Param('id') id: string,
+    @Body() newPassword: Password,
+  ): Promise<any> {
     //return newPassword
     return this.storeService.updatePasswordStore(newPassword, id);
   }
@@ -68,6 +87,26 @@ export class StoreController {
 
   @Get('/get-partnership-requests')
   getPartnershipRequests(): Promise<any> {
-    return this.storeService.getPartnershipRequests()
+    return this.storeService.getPartnershipRequests();
+  }
+
+  @Post('/forgot-password')
+  @ApiCreatedResponse({})
+  async forgotPassword(@Body() emailInfo: EmailDto) {
+    return await this.storeService.forgotPassword(emailInfo.email);
+  }
+
+  @ApiHeader({
+    name: 'Bearer',
+    description: 'the token we need for authentification.',
+  })
+  @UseGuards(JwtAuthGuard)
+  @Post('/reset-password')
+  @ApiCreatedResponse({})
+  async resetPassword(
+    @Body() passwordInfo: ForgotPasswordDto,
+    @GetUser() user,
+  ) {
+    return await this.storeService.resetPassword(passwordInfo, user);
   }
 }

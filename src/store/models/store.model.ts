@@ -16,11 +16,11 @@ export const StoreSchema = new mongoose.Schema(
     username: { type: String },
     source: {
       filename: { type: String, required: false },
-      mimetype: { type: String, required: false }, 
-      path: { type: String},
-      originalname: {type: String}
+      mimetype: { type: String, required: false },
+      path: { type: String },
+      originalname: { type: String },
     },
-    website: {type: String},
+    website: { type: String },
     role: {
       type: String,
       default: ROLE.store,
@@ -36,8 +36,8 @@ export const StoreSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      default: STATUS.deactivated
-    }
+      default: STATUS.deactivated,
+    },
   },
   { timestamps: true },
 );
@@ -51,5 +51,5 @@ export interface Store extends mongoose.Document {
   file: Express.Multer.File;
   role: string;
   address: Array<string>;
-  status: string
+  status: string;
 }

@@ -1,4 +1,4 @@
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -6,7 +6,6 @@ import {
   MaxLength,
   IsEmail,
 } from 'class-validator';
-import { LoginUserDto } from './userLogin.dto';
 
 export class EmailDto {
   @ApiProperty({

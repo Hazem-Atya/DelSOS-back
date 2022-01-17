@@ -10,11 +10,13 @@ import { AuthController } from './auth.controller';
 import { ConfigService } from '@nestjs/config';
 import { MailModule } from 'src/mail/mail.module';
 import { ShopperSchema } from 'src/shopper/models/shopper.model';
+import { StoreSchema } from 'src/store/models/store.model';
 
 @Module({
   imports: [
     MailModule,
     MongooseModule.forFeature([{ name: 'Shopper', schema: ShopperSchema }]),
+    MongooseModule.forFeature([{ name: 'Store', schema: StoreSchema }]),
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({

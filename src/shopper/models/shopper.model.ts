@@ -1,4 +1,4 @@
-import { ROLE } from '../../utils/enum';
+import { ROLE, STATUS } from '../../utils/enum';
 import * as mongoose from 'mongoose';
 
 export const ShopperSchema = new mongoose.Schema(
@@ -37,7 +37,10 @@ export const ShopperSchema = new mongoose.Schema(
 
     address: { type: String, default: '' },
 
-    isConfirmed: { type: Boolean, default: 'false' },
+    status: {
+      type: String,
+      default: STATUS.deactivated,
+    },
   },
   { timestamps: true },
 );
@@ -53,5 +56,5 @@ export interface Shopper extends mongoose.Document {
   bankDetails: Object;
   range: Array<number>;
   address: string;
-  isConfirmed: boolean;
+  status: string;
 }

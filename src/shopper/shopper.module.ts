@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from 'src/auth/auth.module';
@@ -13,6 +14,7 @@ import { ShopperService } from './shopper.service';
     AuthModule,
     MailModule,
     UtilsModule,
+    ConfigModule,
     MongooseModule.forFeature([{ name: 'Shopper', schema: ShopperSchema }]),
     JwtModule.register({
       secret: process.env.SECRET,
@@ -20,6 +22,6 @@ import { ShopperService } from './shopper.service';
     }),
   ],
   providers: [ShopperService],
-  controllers: [ShopperController]
+  controllers: [ShopperController],
 })
 export class ShopperModule {}

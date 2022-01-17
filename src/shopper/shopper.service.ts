@@ -14,6 +14,10 @@ import { AuthService } from 'src/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
 import { Password } from 'src/auth/DTO/password.dto';
 import { CrudService } from 'src/utils/crud.service';
+import { EmailDto } from 'src/auth/DTO/email.dto';
+import { UtilsService } from 'src/utils/utils.service';
+import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
+import { TYPE } from 'src/utils/enum';
 
 @Injectable()
 export class ShopperService {
@@ -24,6 +28,7 @@ export class ShopperService {
     private readonly authService: AuthService,
     private readonly configService: ConfigService,
     private readonly crudService: CrudService,
+    private readonly utilService: UtilsService,
   ) {}
 
   async registerShopper(userData: CreateShopperDto): Promise<any> {
@@ -51,6 +56,7 @@ export class ShopperService {
       {
         email: email,
         sub: user._id,
+        type: TYPE.shopper,
       },
       this.configService.get('CONFIRM_TOKEN_EXPIRATION'),
     );
@@ -91,5 +97,21 @@ export class ShopperService {
 
   async deleteShopper(id: string): Promise<any> {
     return this.crudService.delete(this.shopperModel, id);
+  }
+
+  async forgotPassword(email: string) {
+    return this.utilService.forgotPassword(
+      this.shopperModel,
+      email,
+      TYPE.shopper,
+    );
+  }
+
+  async resetPassword(passwordInfo: ForgotPasswordDto, user) {
+    return this.utilService.resetPassword(
+      this.shopperModel,
+      passwordInfo,
+      user,
+    );
   }
 }

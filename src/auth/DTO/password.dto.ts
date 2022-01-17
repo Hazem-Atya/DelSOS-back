@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString, MinLength } from "class-validator";
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
-export class Password{
+export class Password {
   @IsNotEmpty()
   @IsString()
   @MinLength(8)
