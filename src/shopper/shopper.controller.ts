@@ -1,5 +1,6 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Delete,
   Get,
@@ -7,7 +8,9 @@ import {
   HttpStatus,
   Param,
   Post,
+  Query,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
@@ -15,13 +18,14 @@ import { GetUser } from 'src/auth/decorators/user.decorator';
 import { EmailDto } from 'src/auth/DTO/email.dto';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { Password } from 'src/auth/DTO/password.dto';
+import { PaginationParams } from 'src/utils/pagination.params';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
 import { Shopper } from './models/shopper.model';
 import { ShopperService } from './shopper.service';
 
 @Controller('shopper')
 export class ShopperController {
-  constructor(private readonly shopperService: ShopperService) {}
+  constructor(private readonly shopperService: ShopperService) { }
 
   @Post('/register')
   @HttpCode(HttpStatus.CREATED)
@@ -34,11 +38,18 @@ export class ShopperController {
   async getShopperById(@Param('id') id: string) {
     return this.shopperService.getShopper(id);
   }
-  @Get('/all')
+  @Get('/shoppers/all')
   async getAllShoppers(): Promise<Shopper[]> {
     return this.shopperService.getAll();
   }
+  @Get('get/all')
+  async getAllWithPagination(
+    @Query() { skip, limit }: PaginationParams)
+    : Promise<Shopper[]> {
+    return  this.shopperService.getAll_v2(skip, limit);
+    
 
+  }
   @Post('/update')
   async updateShopper(@Body() newShopper: Partial<Shopper>): Promise<any> {
     return this.shopperService.updateShopper(newShopper);

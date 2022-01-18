@@ -29,7 +29,7 @@ export class ShopperService {
     private readonly configService: ConfigService,
     private readonly crudService: CrudService,
     private readonly utilService: UtilsService,
-  ) {}
+  ) { }
 
   async registerShopper(userData: CreateShopperDto): Promise<any> {
     const email = userData.email;
@@ -81,6 +81,17 @@ export class ShopperService {
 
   async getAll(): Promise<Shopper[]> {
     return await this.shopperModel.find();
+  }
+  async getAll_v2(documentsToSkip = 0, limitOfDocuments?: number) {
+    const query = this.shopperModel
+      .find()
+      .sort({ _id: 1 })
+      .skip(documentsToSkip)
+   
+    if (limitOfDocuments) {
+      query.limit(limitOfDocuments);
+    }
+    return query;
   }
 
   async updateShopper(newShopper: Partial<Shopper>): Promise<any> {
