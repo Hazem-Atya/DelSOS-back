@@ -18,6 +18,8 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/login')
   async login(@GetUser() user) {
+
+    console.log(user)
     return this.authService.createToken(
       user,
       this.configService.get('LOGIN_TOKEN_EXPIRATION'),
