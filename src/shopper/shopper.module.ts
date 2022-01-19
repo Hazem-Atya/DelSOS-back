@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from 'src/auth/auth.module';
 import { MailModule } from 'src/mail/mail.module';
+import { StoreService } from 'src/store/store.service';
 import { UtilsModule } from 'src/utils/utils.module';
 import { ShopperSchema } from './models/shopper.model';
 import { ShopperController } from './shopper.controller';

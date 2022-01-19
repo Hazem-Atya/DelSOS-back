@@ -35,6 +35,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!user || user.status === STATUS.deactivated) {
       throw new UnauthorizedException();
     }
-    return user;
+    else {
+      const { _doc, ...reste } = user;
+      const { password, ...result } = _doc;
+      return result;
+    }
+
+    //return user;
   }
 }

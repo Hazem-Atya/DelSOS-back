@@ -42,7 +42,7 @@ export const StoreSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export interface Store extends mongoose.Document {
+export class Store extends mongoose.Document {
   name: string;
   username: string;
   email: string;

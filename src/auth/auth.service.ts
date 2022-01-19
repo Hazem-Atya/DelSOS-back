@@ -23,7 +23,7 @@ export class AuthService {
     @InjectModel('Store')
     private readonly storeModel: Model<Store>,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(loginInfo: LoginUserDto): Promise<any> {
     const { password, email } = loginInfo;
@@ -31,7 +31,8 @@ export class AuthService {
     let user;
     let type = TYPE.shopper;
     if (!shopper) {
-      user = await this.storeModel.findOne({ username: email });
+      console.log('I am here!!')
+      user = await this.storeModel.findOne({  email });
       type = TYPE.store;
     } else user = shopper;
     if (user && user.status === STATUS.activated) {
