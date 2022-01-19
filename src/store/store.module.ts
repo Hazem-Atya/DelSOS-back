@@ -21,6 +21,7 @@ import { StoreService } from './store.service';
       signOptions: { expiresIn: '24h' },
     }),
   ],
+  exports:[StoreService],
   controllers: [StoreController],
   providers: [StoreService],
 })

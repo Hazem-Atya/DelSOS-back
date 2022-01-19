@@ -88,7 +88,7 @@ export class ShopperService {
       .sort({ _id: 1 })
       .skip(documentsToSkip)
    
-    if (limitOfDocuments) {
+    if (limitOfDocuments) { // when limit =0 this condition will be false 
       query.limit(limitOfDocuments);
     }
     return query;
