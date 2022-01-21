@@ -31,7 +31,7 @@ export class AuthService {
     let user;
     let type = TYPE.shopper;
     if (!shopper) {
-      user = await this.storeModel.findOne({ username: email });
+      user = await this.storeModel.findOne({ email });
       type = TYPE.store;
     } else user = shopper;
     if (user && user.status === STATUS.activated) {
