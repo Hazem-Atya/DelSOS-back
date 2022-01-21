@@ -58,7 +58,11 @@ export class CreateShopperDto {
   @IsString()
   @MinLength(5)
   @MaxLength(255)
-  @IsEmail()
+  @IsEmail({},
+    {
+      message:"Please type a correct email"
+    }
+  )
   readonly email: string;
 
   // Password

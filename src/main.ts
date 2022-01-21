@@ -25,4 +25,5 @@ async function bootstrap() {
   app.use(morgan('dev'));
   await app.listen(configService.get('APP_PORT'));
 }
+
 bootstrap();

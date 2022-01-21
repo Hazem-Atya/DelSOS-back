@@ -23,7 +23,7 @@ export class AuthService {
     @InjectModel('Store')
     private readonly storeModel: Model<Store>,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(loginInfo: LoginUserDto): Promise<any> {
     const { password, email } = loginInfo;
