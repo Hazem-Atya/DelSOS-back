@@ -14,6 +14,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
+import { retry } from 'rxjs';
 import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/user.decorator';
 import { EmailDto } from 'src/auth/DTO/email.dto';
@@ -59,16 +60,14 @@ export class StoreController {
   }
 
   @Post('/update')
-  async updateStore(@Body() newStore: Store): Promise<any> {
+  async updateStore(@Body() newStore): Promise<any> {
     return this.storeService.updateStore(newStore);
   }
 
-  @Post('/update-password/:id')
-  async updatePasswordStore(
-    @Param('id') id: string,
-    @Body() newPassword: Password,
-  ): Promise<any> {
-    //return newPassword
+  @Post('/update-password')
+  async updatePasswordStore(@Body() newPassword: Password): Promise<any> {
+    return newPassword
+    const id="1"
     return this.storeService.updatePasswordStore(newPassword, id);
   }
   @Delete('/delete/:id')

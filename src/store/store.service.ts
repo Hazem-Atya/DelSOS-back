@@ -49,11 +49,11 @@ export class StoreService {
         `This email is already used`,
       );
     }
+
     const user = await this.storeModel.create({
       ...userData,
       username,
       source,
-      address: [],
     });
 
     try {
@@ -76,10 +76,10 @@ export class StoreService {
     return this.crudService.update(this.storeModel, newStore);
   }
 
-  updatePasswordStore(newPassword: Password, id: string): any {
+  updatePasswordStore(passwordData: Password, id: string): any {
     return this.crudService.updatePassword(
       this.storeModel,
-      newPassword.password,
+      passwordData.newPassword,
       id,
     );
   }
