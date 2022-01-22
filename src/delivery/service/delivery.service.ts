@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { CreateDeliveryDTO } from 'src/delivery/DTO/create-delivery.dto';
@@ -9,68 +13,67 @@ import { Store } from 'src/store/models/store.model';
 
 @Injectable()
 export class DeliveryService {
+  constructor(
+    @InjectModel('Delivery')
+    private readonly deliveryModel: Model<Delivery>,
+    @InjectModel('Store')
+    private readonly storeModel: Model<Store>,
+    @InjectModel('Shopper')
+    private readonly shopperModel: Model<Shopper>,
+    private shopperService: ShopperService,
+  ) {}
 
-    constructor(
-        @InjectModel('Delivery')
-        private readonly deliveryModel: Model<Delivery>,
-        @InjectModel('Store')
-        private readonly storeModel: Model<Store>,
-        @InjectModel('Shopper')
-        private readonly shopperModel: Model<Shopper>,
-        private shopperService: ShopperService
-    ) {
-    }
+  async addDelivery(storeId: any, delivery: CreateDeliveryDTO): Promise<any> {
+    return await this.deliveryModel.create({
+      ...delivery,
+      store: storeId,
+    });
+  }
+  async getDeliveriesByStoreId(storeId) {
+    return await this.deliveryModel
+      .find({
+        store: storeId,
+      })
+      .populate('store', '', this.storeModel)
+      .populate('shopper', '', this.shopperModel)
+      .exec();
+  }
 
-    async addDelivery(storeId: any, delivery: CreateDeliveryDTO): Promise<any> {
-
-
-        return await this.deliveryModel.create(
-            {
-                ...delivery,
-                store: storeId
-            }
-        );
-
-    }
-    async getDeliveriesByStoreId(storeId) {
-        return await this.deliveryModel.find({
-            store: storeId
-        }).populate('store', '', this.storeModel)
-            .populate('shopper', '', this.shopperModel).exec();
-    }
-
-    /*    this function lets the store affects a shopper to the delivery
+  /*    this function lets the store affects a shopper to the delivery
         The shopper should have be in the list of the shoppers who asked to get the delivery
     */
-    async affectShoppertoDelivery(storeId, shopperEmail, deliveryId) {
-        const delivery = await this.deliveryModel.findById(deliveryId);
-        if (!delivery) {
-            throw new NotFoundException('Delivery not found');
-        }
-        const shopper = await this.shopperService.getShopperByEmail(shopperEmail);
-        if (!shopper) {
-            throw new NotFoundException('Shopper with email ' + shopperEmail + ' not found');
-        }
-        delivery.shopper = shopper._id;
-        return await this.deliveryModel.updateOne({ _id: deliveryId }, delivery).exec();
+  async affectShoppertoDelivery(storeId, shopperEmail, deliveryId) {
+    const delivery = await this.deliveryModel.findById(deliveryId);
+    if (!delivery) {
+      throw new NotFoundException('Delivery not found');
     }
-
-    async requestDelivery(deliveryId, shopperId) {
-        const delivery = await this.deliveryModel.findById(deliveryId);
-        console.log('The delivery:\n', delivery);
-        if (!delivery) {
-            throw new NotFoundException('Delivery not found');
-        }
-        const shopperlreadyApplied= delivery.applicants.find((el) => {
-
-            if  (el == shopperId) 
-                return el
-        })
-        if (shopperlreadyApplied) {
-            throw new ConflictException('Shopper already applied for this delivery');
-        }
-        delivery.applicants.push(shopperId);
-        return await this.deliveryModel.updateOne({ _id: deliveryId }, delivery).exec();
+    const shopper = await this.shopperService.getShopperByEmail(shopperEmail);
+    if (!shopper) {
+      throw new NotFoundException(
+        'Shopper with email ' + shopperEmail + ' not found',
+      );
     }
+    delivery.shopper = shopper._id;
+    return await this.deliveryModel
+      .updateOne({ _id: deliveryId }, delivery)
+      .exec();
+  }
 
+  async requestDelivery(deliveryId, shopperId) {
+    const delivery = await this.deliveryModel.findById(deliveryId);
+    console.log('The delivery:\n', delivery);
+    if (!delivery) {
+      throw new NotFoundException('Delivery not found');
+    }
+    const shopperlreadyApplied = delivery.applicants.find((el) => {
+      if (el == shopperId) return el;
+    });
+    if (shopperlreadyApplied) {
+      throw new ConflictException('Shopper already applied for this delivery');
+    }
+    delivery.applicants.push(shopperId);
+    return await this.deliveryModel
+      .updateOne({ _id: deliveryId }, delivery)
+      .exec();
+  }
 }
