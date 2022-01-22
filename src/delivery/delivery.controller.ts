@@ -84,7 +84,24 @@ export class DeliveryController {
         if (shopper.role != ROLE.shopper) {
             throw new UnauthorizedException("nooooooooooooooo");
         }
-       return  this.deliveryService.requestDelivery(delivery.deliveryId, shopper._id);
+        return this.deliveryService.requestDelivery(delivery.deliveryId, shopper._id);
     }
 
+
+    @Get('shoppersDeliveries')
+    @UseGuards(JwtAuthGuard)
+    async getShopperDeliveries(
+        @Req() request: Request
+    ) {
+        const user = request.user;
+        const shopper = {
+            _id: '',
+            role: '',
+            ...user
+        }
+        if (shopper.role != ROLE.shopper) {
+            throw new UnauthorizedException("WE NEED A SHOPPER");
+        }
+        return await this.deliveryService.getDeliveriesByShopperId(shopper._id);
+    }
 }
