@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -81,6 +82,7 @@ export class StoreService {
     const currentPassword = await this.storeModel
       .findById(id)
       .select('password');
+
     const testPassword = bcrypt.compareSync(
       passwordData.currentPassword,
       currentPassword.password,
@@ -88,12 +90,14 @@ export class StoreService {
     if (
       testPassword &&
       passwordData.newPassword == passwordData.confirmPassword
-    )
-      return this.crudService.updatePassword(
+    ) {
+      await this.crudService.updatePassword(
         this.storeModel,
         passwordData.newPassword,
         id,
       );
+      return HttpStatus.OK;
+    }
 
     throw new UnauthorizedException('Check your passwords!');
   }

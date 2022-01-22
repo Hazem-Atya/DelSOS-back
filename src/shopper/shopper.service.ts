@@ -114,12 +114,15 @@ export class ShopperService {
     if (
       testPassword &&
       passwordData.newPassword == passwordData.confirmPassword
-    )
-      return this.crudService.updatePassword(
+    ) {
+      await this.crudService.updatePassword(
         this.shopperModel,
         passwordData.newPassword,
         id,
       );
+      return HttpStatus.OK
+    }
+
     return new UnauthorizedException('Check your passwords!');
   }
 
