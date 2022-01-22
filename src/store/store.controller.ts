@@ -19,7 +19,7 @@ import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/user.decorator';
 import { EmailDto } from 'src/auth/DTO/email.dto';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
-import { Password } from 'src/auth/DTO/password.dto';
+import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
 import { editFileName } from 'src/utils/constants';
 import { CreateStoreDto } from './DTO/storeCreation.dto';
 import { Store } from './models/store.model';
@@ -64,12 +64,19 @@ export class StoreController {
     return this.storeService.updateStore(newStore);
   }
 
+  @ApiHeader({
+    name: 'Bearer',
+    description: 'the token we need for authentification.',
+  })
+  @UseGuards(JwtAuthGuard)
   @Post('/update-password')
-  async updatePasswordStore(@Body() newPassword: Password): Promise<any> {
-    return newPassword
-    const id="1"
-    return this.storeService.updatePasswordStore(newPassword, id);
+  async updatePasswordStore(
+    @Body() passwordData: updatePasswordDto,
+    @GetUser() store,
+  ): Promise<any> {
+    return this.storeService.updatePasswordStore(passwordData, store._id);
   }
+
   @Delete('/delete/:id')
   deleteStore(@Param('id') id: string) {
     return this.storeService.deleteStore(id);

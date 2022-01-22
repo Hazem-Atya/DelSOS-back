@@ -2,12 +2,12 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AuthService } from 'src/auth/auth.service';
-import { Password } from 'src/auth/DTO/password.dto';
 import { MailService } from 'src/mail/mail.service';
 import { Store } from 'src/store/models/store.model';
 import { CrudService } from 'src/utils/crud.service';
@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { UtilsService } from 'src/utils/utils.service';
+import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
 
 @Injectable()
 export class StoreService {
@@ -76,12 +77,25 @@ export class StoreService {
     return this.crudService.update(this.storeModel, newStore);
   }
 
-  updatePasswordStore(passwordData: Password, id: string): any {
-    return this.crudService.updatePassword(
-      this.storeModel,
-      passwordData.newPassword,
-      id,
+  async updatePasswordStore(passwordData: updatePasswordDto, id): Promise<any> {
+    const currentPassword = await this.storeModel
+      .findById(id)
+      .select('password');
+    const testPassword = bcrypt.compareSync(
+      passwordData.currentPassword,
+      currentPassword.password,
     );
+    if (
+      testPassword &&
+      passwordData.newPassword == passwordData.confirmPassword
+    )
+      return this.crudService.updatePassword(
+        this.storeModel,
+        passwordData.newPassword,
+        id,
+      );
+
+    throw new UnauthorizedException('Check your passwords!');
   }
 
   async deleteStore(id: string) {

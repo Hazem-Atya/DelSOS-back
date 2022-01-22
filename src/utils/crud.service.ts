@@ -37,7 +37,7 @@ export class CrudService {
    * UPDATE PASSWORD
    *
    */
-  async updatePassword(model: Model<any>, newPass: string, id: string) {
+  async updatePassword(model: Model<any>, newPass: string, id) {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(newPass, salt);
 

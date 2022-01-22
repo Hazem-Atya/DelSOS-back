@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -12,12 +13,12 @@ import * as bcrypt from 'bcrypt';
 import { MailService } from 'src/mail/mail.service';
 import { AuthService } from 'src/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { Password } from 'src/auth/DTO/password.dto';
 import { CrudService } from 'src/utils/crud.service';
 import { EmailDto } from 'src/auth/DTO/email.dto';
 import { UtilsService } from 'src/utils/utils.service';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { TYPE } from 'src/utils/enum';
+import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
 
 @Injectable()
 export class ShopperService {
@@ -100,14 +101,26 @@ export class ShopperService {
   }
 
   async updateShopperPassword(
-    passwordData: Password,
+    passwordData: updatePasswordDto,
     id: string,
   ): Promise<any> {
-    return this.crudService.updatePassword(
-      this.shopperModel,
-      passwordData.newPassword,
-      id,
+    const currentPassword = await this.shopperModel
+      .findById(id)
+      .select('password');
+    const testPassword = bcrypt.compareSync(
+      passwordData.currentPassword,
+      currentPassword.password,
     );
+    if (
+      testPassword &&
+      passwordData.newPassword == passwordData.confirmPassword
+    )
+      return this.crudService.updatePassword(
+        this.shopperModel,
+        passwordData.newPassword,
+        id,
+      );
+    return new UnauthorizedException('Check your passwords!');
   }
 
   async deleteShopper(id: string): Promise<any> {
