@@ -3,6 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -12,12 +13,12 @@ import * as bcrypt from 'bcrypt';
 import { MailService } from 'src/mail/mail.service';
 import { AuthService } from 'src/auth/auth.service';
 import { ConfigService } from '@nestjs/config';
-import { Password } from 'src/auth/DTO/password.dto';
 import { CrudService } from 'src/utils/crud.service';
 import { EmailDto } from 'src/auth/DTO/email.dto';
 import { UtilsService } from 'src/utils/utils.service';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { TYPE } from 'src/utils/enum';
+import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
 
 @Injectable()
 export class ShopperService {
@@ -29,7 +30,7 @@ export class ShopperService {
     private readonly configService: ConfigService,
     private readonly crudService: CrudService,
     private readonly utilService: UtilsService,
-  ) { }
+  ) {}
 
   async registerShopper(userData: CreateShopperDto): Promise<any> {
     const email = userData.email;
@@ -86,9 +87,10 @@ export class ShopperService {
     const query = this.shopperModel
       .find()
       .sort({ _id: 1 })
-      .skip(documentsToSkip)
+      .skip(documentsToSkip);
 
-    if (limitOfDocuments) { // when limit =0 this condition will be false 
+    if (limitOfDocuments) {
+      // when limit =0 this condition will be false
       query.limit(limitOfDocuments);
     }
     return query;
@@ -98,12 +100,30 @@ export class ShopperService {
     return this.crudService.update(this.shopperModel, newShopper);
   }
 
-  async updateShopperPassword(password: Password, id: string): Promise<any> {
-    return this.crudService.updatePassword(
-      this.shopperModel,
-      password.password,
-      id,
+  async updateShopperPassword(
+    passwordData: updatePasswordDto,
+    id: string,
+  ): Promise<any> {
+    const currentPassword = await this.shopperModel
+      .findById(id)
+      .select('password');
+    const testPassword = bcrypt.compareSync(
+      passwordData.currentPassword,
+      currentPassword.password,
     );
+    if (
+      testPassword &&
+      passwordData.newPassword == passwordData.confirmPassword
+    ) {
+      await this.crudService.updatePassword(
+        this.shopperModel,
+        passwordData.newPassword,
+        id,
+      );
+      return HttpStatus.OK
+    }
+
+    return new UnauthorizedException('Check your passwords!');
   }
 
   async deleteShopper(id: string): Promise<any> {

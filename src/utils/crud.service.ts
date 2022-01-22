@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpCode, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Store } from 'src/store/models/store.model';
 import * as bcrypt from 'bcrypt';
 import { UpdateResult } from 'mongodb';
 import { Shopper } from 'src/shopper/models/shopper.model';
+import { Exception } from 'handlebars/runtime';
 
 @Injectable()
 export class CrudService {
@@ -37,7 +38,7 @@ export class CrudService {
    * UPDATE PASSWORD
    *
    */
-  async updatePassword(model: Model<any>, newPass: string, id: string) {
+  async updatePassword(model: Model<any>, newPass: string, id) {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(newPass, salt);
 
@@ -48,7 +49,7 @@ export class CrudService {
 
     if (!user) throw new NotFoundException('NOT FOUND');
 
-    return `password updated successfully`;
+    return 'password updated successfully'; 
   }
 
   /**
