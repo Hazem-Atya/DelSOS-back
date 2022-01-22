@@ -3,15 +3,16 @@ import * as mongoose from 'mongoose';
 import { Schema } from '@nestjs/mongoose';
 import { Store } from 'src/store/models/store.model';
 import { Shopper } from 'src/shopper/models/shopper.model';
+import { Types } from 'mongoose';
 
 export enum DELIVERY_TYPE {
-    BREAKABLE='breakable',
-    HAZARDOUS='hazardous',
-    FURNITURE='furniture',
-    PACKAGE='package',
-    LIQUID='liquid',
-    CAN_EXPIRE='can expire',
-    ELECTRONICS='electronics'
+    BREAKABLE = 'breakable',
+    HAZARDOUS = 'hazardous',
+    FURNITURE = 'furniture',
+    PACKAGE = 'package',
+    LIQUID = 'liquid',
+    CAN_EXPIRE = 'can expire',
+    ELECTRONICS = 'electronics'
 };
 export enum PRIORITY {
     HIGH = 1,
@@ -57,7 +58,7 @@ export const DeliverySchema = new mongoose.Schema(
         type: {
             type: [String],
             required: true,
-            default:[DELIVERY_TYPE.PACKAGE]
+            default: [DELIVERY_TYPE.PACKAGE]
         },
         priority: {
             type: String,
@@ -67,8 +68,19 @@ export const DeliverySchema = new mongoose.Schema(
             type: String,
             default: DELIVERY_STATUS.PENDING,
         },
-  
-       
+        trackingHistory: {
+            type: [{
+                date: {type:Date,default:new Date().toJSON()},
+                description:{type: String},
+            }]
+        },
+
+        applicants:{
+            type:[String],
+            default: []
+        }
+
+
     },
     { timestamps: true },
 );
@@ -76,12 +88,14 @@ export class Delivery extends mongoose.Document {
     description: string;
     source: string;
     destination: string;
-    store: mongoose.Types.ObjectId;
-    shopper: mongoose.Types.ObjectId;
+    store: Types.ObjectId;
+    shopper: Types.ObjectId;
     weight: number;
     height: number;
     width: number;
     type: DELIVERY_TYPE[];
     priority: PRIORITY;
     status: DELIVERY_STATUS;
+    trackingHistory:{date:Date,description:string}[]; 
+    applicants:String[];
 }

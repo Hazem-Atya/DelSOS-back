@@ -23,6 +23,7 @@ import { ShopperService } from './shopper.service';
     }),
   ],
   providers: [ShopperService],
+  exports:[ShopperService],
   controllers: [ShopperController],
 })
 export class ShopperModule {}

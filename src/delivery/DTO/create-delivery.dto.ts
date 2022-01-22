@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
+import { ArrayUnique, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import * as mongoose from 'mongoose';
 import { DELIVERY_TYPE, PRIORITY } from '../model/delivery.model';
 
@@ -42,5 +42,7 @@ export class CreateDeliveryDTO {
     @IsOptional()
     @IsEnum(PRIORITY)
     priority: PRIORITY;
+    @ArrayUnique()
+    trackingHistory:{date:Date,description:string}[]
 
 }

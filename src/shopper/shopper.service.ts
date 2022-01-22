@@ -87,7 +87,7 @@ export class ShopperService {
       .find()
       .sort({ _id: 1 })
       .skip(documentsToSkip)
-   
+
     if (limitOfDocuments) { // when limit =0 this condition will be false 
       query.limit(limitOfDocuments);
     }
@@ -124,5 +124,9 @@ export class ShopperService {
       passwordInfo,
       user,
     );
+  }
+  async getShopperByEmail(email) {
+
+    return await this.shopperModel.findOne({ email });
   }
 }

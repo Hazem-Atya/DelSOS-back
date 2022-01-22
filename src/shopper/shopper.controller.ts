@@ -31,6 +31,7 @@ export class ShopperController {
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
   async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
+    console.log(createShopperDto);
     return await this.shopperService.registerShopper(createShopperDto);
   }
 
