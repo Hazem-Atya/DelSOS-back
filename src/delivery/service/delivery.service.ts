@@ -4,9 +4,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { CreateDeliveryDTO } from 'src/delivery/DTO/create-delivery.dto';
-import { Delivery } from 'src/delivery/model/delivery.model';
+import { Delivery, DELIVERY_STATUS } from 'src/delivery/model/delivery.model';
 import { Shopper } from 'src/shopper/models/shopper.model';
 import { ShopperService } from 'src/shopper/shopper.service';
 import { Store } from 'src/store/models/store.model';
@@ -54,6 +54,7 @@ export class DeliveryService {
       );
     }
     delivery.shopper = shopper._id;
+    delivery.status = DELIVERY_STATUS.ON_THE_WAY;
     return await this.deliveryModel
       .updateOne({ _id: deliveryId }, delivery)
       .exec();
@@ -76,4 +77,11 @@ export class DeliveryService {
       .updateOne({ _id: deliveryId }, delivery)
       .exec();
   }
+
+  async getDeliveriesByShopperId(shopperId) {
+    console.log('shopper id:', shopperId);
+    return await this.deliveryModel.find({ shopper: shopperId });
+  }
+
+  // getDeliveryByApplicantID
 }

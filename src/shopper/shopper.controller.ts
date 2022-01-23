@@ -49,9 +49,13 @@ export class ShopperController {
   ): Promise<Shopper[]> {
     return this.shopperService.getAll_v2(skip, limit);
   }
+  @UseGuards(JwtAuthGuard)
   @Post('/update')
-  async updateShopper(@Body() newShopper: Partial<Shopper>): Promise<any> {
-    return this.shopperService.updateShopper(newShopper);
+  async updateShopper(
+    @Body() newShopper: Partial<Shopper>,
+    @GetUser() shopper,
+  ): Promise<any> {
+    return this.shopperService.updateShopper(shopper._id,newShopper);
   }
 
   @ApiHeader({
@@ -62,9 +66,9 @@ export class ShopperController {
   @Post('/update-password')
   async updatePasswordShopper(
     @Body() passwordData: updatePasswordDto,
-    @GetUser() store,
+    @GetUser() shopper,
   ): Promise<any> {
-    return this.shopperService.updateShopperPassword(passwordData, store._id);
+    return this.shopperService.updateShopperPassword(passwordData, shopper._id);
   }
 
   @Delete('/delete/:id')

@@ -12,8 +12,6 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
-import { Store } from 'src/store/models/store.model';
-import { StoreService } from 'src/store/store.service';
 import { ROLE } from 'src/utils/enum';
 import { AffectShopperDTO } from './DTO/affect-shopper.dto';
 import { CreateDeliveryDTO } from './DTO/create-delivery.dto';
@@ -92,5 +90,20 @@ export class DeliveryController {
       delivery.deliveryId,
       shopper._id,
     );
+  }
+
+  @Get('shoppersDeliveries')
+  @UseGuards(JwtAuthGuard)
+  async getShopperDeliveries(@Req() request: Request) {
+    const user = request.user;
+    const shopper = {
+      _id: '',
+      role: '',
+      ...user,
+    };
+    if (shopper.role != ROLE.shopper) {
+      throw new UnauthorizedException('WE NEED A SHOPPER');
+    }
+    return await this.deliveryService.getDeliveriesByShopperId(shopper._id);
   }
 }

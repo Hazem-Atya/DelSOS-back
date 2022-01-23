@@ -96,8 +96,8 @@ export class ShopperService {
     return query;
   }
 
-  async updateShopper(newShopper: Partial<Shopper>): Promise<any> {
-    return this.crudService.update(this.shopperModel, newShopper);
+  async updateShopper(id, newShopper: Partial<Shopper>): Promise<any> {
+    return this.crudService.update(this.shopperModel, id, newShopper);
   }
 
   async updateShopperPassword(

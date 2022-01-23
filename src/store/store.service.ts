@@ -74,8 +74,8 @@ export class StoreService {
     return await this.storeModel.find();
   }
 
-  async updateStore(newStore: Store): Promise<any> {
-    return this.crudService.update(this.storeModel, newStore);
+  async updateStore(id,newStore: Store): Promise<any> {
+    return this.crudService.update(this.storeModel,id, newStore);
   }
 
   async updatePasswordStore(passwordData: updatePasswordDto, id): Promise<any> {

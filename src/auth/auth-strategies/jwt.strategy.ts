@@ -34,8 +34,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     else user = await this.storeModel.findOne({ email: payload.email });
     if (!user || user.status === STATUS.deactivated) {
       throw new UnauthorizedException();
-    }
-    else {
+    } else {
       const { _doc, ...reste } = user;
       const { password, ...result } = _doc;
       return result;
