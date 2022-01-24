@@ -39,6 +39,7 @@ export class DeliveryController {
       throw new UnauthorizedException();
     }
     console.log('This is the store I received:', store._id);
+
     return await this.deliveryService.addDelivery(store._id, createDeliveryDTO);
   }
 
