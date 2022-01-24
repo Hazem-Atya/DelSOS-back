@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { CreateDeliveryDTO } from 'src/delivery/DTO/create-delivery.dto';
 import { Delivery, DELIVERY_STATUS } from 'src/delivery/model/delivery.model';
 import { Shopper } from 'src/shopper/models/shopper.model';
@@ -11,7 +11,6 @@ import { AddTrackingDTO } from '../DTO/add-tracking.dto';
 
 @Injectable()
 export class DeliveryService {
-
     constructor(
         @InjectModel('Delivery')
         private readonly deliveryModel: Model<Delivery>,
@@ -101,6 +100,7 @@ export class DeliveryService {
         return await this.deliveryModel.updateOne({ _id: deliveryId }, delivery).exec();
     }
 
+
     async getDeliveriesByShopperId(shopperId, documentsToSkip = 0, limitOfDocuments?: number) {
         const deliveries = this.deliveryModel.find({ shopper: shopperId })
             .sort({ _id: 1 }).skip(documentsToSkip);
@@ -133,6 +133,7 @@ export class DeliveryService {
         return await this.deliveryModel.updateOne({ _id: delivery._id }, delivery).exec();
 
     }
+
 
 
     //check if the delivery is updatable by the user trying to update it

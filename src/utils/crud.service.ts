@@ -1,4 +1,9 @@
-import { HttpCode, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Store } from 'src/store/models/store.model';
 import * as bcrypt from 'bcrypt';
@@ -21,14 +26,16 @@ export class CrudService {
    *
    */
 
-  async update(model: Model<any>, newData: Partial<Shopper | Store>) {
+  async update(model: Model<any>, id, newData: Partial<Shopper | Store>) {
     if (newData) {
-      let row: Promise<UpdateResult>;
-      row = model.updateOne({ _id: newData._id }, newData).exec();
-
-      if (!row) throw new NotFoundException('NOT FOUND');
-
-      return row;
+      await model.findByIdAndUpdate(id, newData, function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          const { password, ...updatedUser } = docs;
+          return updatedUser;
+        }
+      });
     }
     return 'Your data is not valid';
   }
@@ -49,7 +56,7 @@ export class CrudService {
 
     if (!user) throw new NotFoundException('NOT FOUND');
 
-    return 'password updated successfully'; 
+    return 'password updated successfully';
   }
 
   /**

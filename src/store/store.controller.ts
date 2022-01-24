@@ -11,6 +11,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
@@ -60,8 +61,10 @@ export class StoreController {
   }
 
   @Post('/update')
-  async updateStore(@Body() newStore): Promise<any> {
-    return this.storeService.updateStore(newStore);
+  @UseGuards(JwtAuthGuard)
+  async updateStore(@Body() newStore, @GetUser() store): Promise<any> {
+    console.log(newStore);
+    return this.storeService.updateStore(store._id,newStore);
   }
 
   @ApiHeader({
