@@ -69,6 +69,23 @@ export class DeliveryController {
             delivery_shopper_data.deliveryId);
     }
 
+
+    @Patch('remove-shopper')
+    @UseGuards(JwtAuthGuard)
+    async removeShopperFromDelivery(
+        @Req() request,
+        @Body() delivery_shopper_data: AffectShopperDTO
+    ) {
+
+        const store = request.user;
+        return await this.deliveryService.removeShopperFromDelivery(
+            store._id,
+            delivery_shopper_data.shopperEmail,
+            delivery_shopper_data.deliveryId);
+    }
+
+
+
     @Patch('apply')
     @UseGuards(JwtAuthGuard)
     async requestDelivery(
