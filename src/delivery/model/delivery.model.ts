@@ -73,6 +73,7 @@ export const DeliverySchema = new mongoose.Schema(
         {
           date: { type: Date, default: new Date().toJSON() },
           description: { type: String },
+          location: { type: String },
         },
       ],
     },
@@ -96,6 +97,6 @@ export class Delivery extends mongoose.Document {
   type: DELIVERY_TYPE[];
   priority: PRIORITY;
   status: DELIVERY_STATUS;
-  trackingHistory: { date: Date; description: string }[];
+  trackingHistory: { date: Date; description: string, location:string }[];
   applicants: String[];
 }
