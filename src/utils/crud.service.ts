@@ -1,9 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Store } from 'src/store/models/store.model';
 import * as bcrypt from 'bcrypt';
 import { UpdateResult } from 'mongodb';
 import { Shopper } from 'src/shopper/models/shopper.model';
+import { Exception } from 'handlebars/runtime';
 
 @Injectable()
 export class CrudService {
@@ -20,14 +26,16 @@ export class CrudService {
    *
    */
 
-  async update(model: Model<any>, newData: Partial<Shopper | Store>) {
+  async update(model: Model<any>, id, newData: Partial<Shopper | Store>) {
     if (newData) {
-      let row: Promise<UpdateResult>;
-      row = model.updateOne({ _id: newData._id }, newData).exec();
-
-      if (!row) throw new NotFoundException('NOT FOUND');
-
-      return row;
+      await model.findByIdAndUpdate(id, newData, function (err, docs) {
+        if (err) {
+          console.log(err);
+        } else {
+          const { password, ...updatedUser } = docs;
+          return updatedUser;
+        }
+      });
     }
     return 'Your data is not valid';
   }
@@ -37,7 +45,9 @@ export class CrudService {
    * UPDATE PASSWORD
    *
    */
+
   async updatePassword(model: Model<any>,oldPass:string, newPass: string, id: string) {
+
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(newPass, salt);
     const password = await bcrypt.hash(oldPass, salt)
@@ -53,7 +63,7 @@ export class CrudService {
 
     if (!user) throw new NotFoundException('NOT FOUND');
 
-    return `password updated successfully`;
+    return 'password updated successfully';
   }
 
   /**

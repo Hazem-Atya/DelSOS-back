@@ -1,6 +1,5 @@
 import { ROLE, STATUS } from '../../utils/enum';
 import * as mongoose from 'mongoose';
-import { Exclude } from 'class-transformer';
 
 export const ShopperSchema = new mongoose.Schema(
   {
@@ -52,7 +51,6 @@ export const ShopperSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
-
 export class Shopper extends mongoose.Document {
   name: string;
   username: string;

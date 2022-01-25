@@ -11,14 +11,16 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
+import { retry } from 'rxjs';
 import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/user.decorator';
 import { EmailDto } from 'src/auth/DTO/email.dto';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
-import { Password } from 'src/auth/DTO/password.dto';
+import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
 import { editFileName } from 'src/utils/constants';
 import { CreateStoreDto } from './DTO/storeCreation.dto';
 import { Store } from './models/store.model';
@@ -59,18 +61,25 @@ export class StoreController {
   }
 
   @Post('/update')
-  async updateStore(@Body() newStore: Store): Promise<any> {
-    return this.storeService.updateStore(newStore);
+  @UseGuards(JwtAuthGuard)
+  async updateStore(@Body() newStore, @GetUser() store): Promise<any> {
+    console.log(newStore);
+    return this.storeService.updateStore(store._id,newStore);
   }
 
-  @Post('/update-password/:id')
+  @ApiHeader({
+    name: 'Bearer',
+    description: 'the token we need for authentification.',
+  })
+  @UseGuards(JwtAuthGuard)
+  @Post('/update-password')
   async updatePasswordStore(
-    @Param('id') id: string,
-    @Body() newPassword: Password,
+    @Body() passwordData: updatePasswordDto,
+    @GetUser() store,
   ): Promise<any> {
-    //return newPassword
-    return this.storeService.updatePasswordStore(newPassword, id);
+    return this.storeService.updatePasswordStore(passwordData, store._id);
   }
+
   @Delete('/delete/:id')
   deleteStore(@Param('id') id: string) {
     return this.storeService.deleteStore(id);

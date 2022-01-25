@@ -29,10 +29,16 @@ export const StoreSchema = new mongoose.Schema(
     lastLogin: {
       type: Date,
     },
+
     address: {
-      required: true,
-      type: Array<string>(),
+      city: { type: String, required: true, default: '' },
+      country: { type: String, required: true, default: '' },
+      postalCode: { type: String, required: true, default: '' },
+      address: { type: String, required: true, default: '' },
     },
+
+    phoneNumber: { type: String },
+    description: { type: String },
 
     status: {
       type: String,
@@ -42,7 +48,7 @@ export const StoreSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export interface Store extends mongoose.Document {
+export class Store extends mongoose.Document {
   name: string;
   username: string;
   email: string;
@@ -50,6 +56,8 @@ export interface Store extends mongoose.Document {
   website: string;
   file: Express.Multer.File;
   role: string;
-  address: Array<string>;
+  address: Object;
+  phoneNumber: string;
   status: string;
+  description: string;
 }
