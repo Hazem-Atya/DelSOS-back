@@ -17,7 +17,7 @@ import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/user.decorator';
 import { EmailDto } from 'src/auth/DTO/email.dto';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
-import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
+import { Password } from 'src/auth/DTO/password.dto';
 import { PaginationParams } from 'src/utils/pagination.params';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
 import { Shopper } from './models/shopper.model';
@@ -65,7 +65,7 @@ export class ShopperController {
   @UseGuards(JwtAuthGuard)
   @Post('/update-password')
   async updatePasswordShopper(
-    @Body() passwordData: updatePasswordDto,
+    @Body() passwordData: Password,
     @GetUser() shopper,
   ): Promise<any> {
     return this.shopperService.updateShopperPassword(passwordData, shopper._id);

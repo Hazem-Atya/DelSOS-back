@@ -18,8 +18,8 @@ import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { UtilsService } from 'src/utils/utils.service';
-import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
 
+import { Password } from 'src/auth/DTO/password.dto';
 @Injectable()
 export class StoreService {
   constructor(

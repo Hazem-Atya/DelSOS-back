@@ -18,7 +18,8 @@ import { EmailDto } from 'src/auth/DTO/email.dto';
 import { UtilsService } from 'src/utils/utils.service';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { TYPE } from 'src/utils/enum';
-import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
+import { Password } from 'src/auth/DTO/password.dto';
+
 
 @Injectable()
 export class ShopperService {
@@ -106,7 +107,6 @@ export class ShopperService {
       this.shopperModel,
       password.oldPassword,
       password.newPassword,
-
       id)}
 
 
