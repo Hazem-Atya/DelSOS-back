@@ -21,11 +21,11 @@ export class CreateShopperDto {
   readonly name: string;
 
   @ApiProperty({
-    description: "The user's age",
+    description: "The shopper's birthdate",
     format: 'string',
   })
   @IsNotEmpty()
-  readonly age: number;
+  readonly birthdate: string;
 
   @ApiProperty({
     description: "The user's address",

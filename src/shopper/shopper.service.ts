@@ -101,7 +101,9 @@ export class ShopperService {
   async updateShopperPassword(password: Password, id: string): Promise<any> {
     return this.crudService.updatePassword(
       this.shopperModel,
-      password.password,
+      password.oldPassword,
+      password.newPassword,
+
       id,
     );
   }

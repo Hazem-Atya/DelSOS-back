@@ -61,7 +61,7 @@ export class StoreService {
     } catch (e) {
       throw new ConflictException(`the email should be unique`);
     }
-    return 'store created';
+    return user;
   }
 
   async getStore(id: string) {
@@ -79,7 +79,8 @@ export class StoreService {
   updatePasswordStore(newPassword: Password, id: string): any {
     return this.crudService.updatePassword(
       this.storeModel,
-      newPassword.password,
+      newPassword.oldPassword,
+      newPassword.newPassword,
       id,
     );
   }
@@ -103,7 +104,7 @@ export class StoreService {
 
       store.status = STATUS.activated;
       store.password = hashedPassword;
-      store.save();
+      
 
       const mail = await this.mailService.activateStore({
         name: store.name,
@@ -112,6 +113,7 @@ export class StoreService {
         password,
       });
       if (!mail) return 'mail not sent';
+      store.save();
       //throw new Exception('mail not sent')
       return store;
     } else {

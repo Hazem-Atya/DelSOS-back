@@ -4,5 +4,12 @@ export class Password {
   @IsNotEmpty()
   @IsString()
   @MinLength(8)
-  readonly password: string;
+  readonly oldPassword: string;
+
+    @IsNotEmpty()
+  @IsString()
+  @MinLength(8)
+  readonly newPassword: string;
+
+
 }
