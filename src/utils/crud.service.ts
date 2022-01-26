@@ -45,11 +45,18 @@ export class CrudService {
    * UPDATE PASSWORD
    *
    */
-  async updatePassword(model: Model<any>, newPass: string, id) {
+
+  async updatePassword(model: Model<any>,oldPass:string, newPass: string, id: string) {
+
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(newPass, salt);
+    const password = await bcrypt.hash(oldPass, salt)
 
     let user: UpdateResult;
+    let olduser = await model.findById(id).select('password')
+
+     const testPassword = bcrypt.compareSync(oldPass, olduser.password);
+     if(!testPassword) return "wrong password ! try again"
     user = await model
       .updateOne({ _id: id }, { password: hashedPassword })
       .exec();

@@ -49,7 +49,7 @@ export class AuthService {
       user = shopper; 
     }
     if (user && user.status === STATUS.activated) {
-      console.log(user);
+
       const testPassword = bcrypt.compareSync(password, user.password);
       if (testPassword) {
         const payload = { email: user.email, sub: user._id, type };

@@ -21,7 +21,7 @@ import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/user.decorator';
 import { EmailDto } from 'src/auth/DTO/email.dto';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
-import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
+import { Password } from 'src/auth/DTO/password.dto';
 import { editFileName } from 'src/utils/constants';
 import { ROLE } from 'src/utils/enum';
 import { CreateStoreDto } from './DTO/storeCreation.dto';
@@ -97,7 +97,7 @@ export class StoreController {
   @UseGuards(JwtAuthGuard)
   @Post('/update-password')
   async updatePasswordStore(
-    @Body() passwordData: updatePasswordDto,
+    @Body() passwordData: Password,
     @GetUser() store,
   ): Promise<any> {
     return this.storeService.updatePasswordStore(passwordData, store._id);

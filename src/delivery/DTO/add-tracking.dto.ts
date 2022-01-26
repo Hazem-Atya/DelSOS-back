@@ -1,8 +1,8 @@
-import { IsDate, IsNotEmpty, IsString, MaxLength } from "class-validator";
-
+import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class TrackingDTO {
-
+    @IsDate()
+    @IsNotEmpty()
     date: Date;
 
     @IsString()
@@ -21,4 +21,3 @@ export class AddTrackingDTO {
     @IsNotEmpty()
     tracking: TrackingDTO
 }
-

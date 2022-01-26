@@ -11,6 +11,13 @@ export const ShopperSchema = new mongoose.Schema(
       maxlength: 255,
       minlength: 6,
     },
+    cinNumber : {type: String},
+    cin: {
+      filename: { type: String, required: false },
+      mimetype: { type: String, required: false },
+      path: { type: String },
+      originalname: { type: String },
+    },
     password: { type: String, select: false },
     username: { type: String },
     age: { type: Number },
@@ -48,6 +55,9 @@ export class Shopper extends mongoose.Document {
   name: string;
   username: string;
   email: string;
+  birthdate : string;
+  cinNumber : String;
+  cin : Express.Multer.File;
   password: string;
   age: number;
   phoneNumber: string;
