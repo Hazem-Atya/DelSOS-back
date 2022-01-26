@@ -71,11 +71,29 @@ export class DeliveryService {
         if (!shopper) {
             throw new NotFoundException('Shopper with email ' + shopperEmail + ' not found');
         }
+        if (!delivery.applicants.find((id) => { if (id == shopper._id) return id })) {
+            throw new UnauthorizedException('You only an affect the delivery to one of the applicants');
+        }
         delivery.shopper = shopper._id;
         delivery.status = DELIVERY_STATUS.ON_THE_WAY;
         return await this.deliveryModel.updateOne({ _id: deliveryId }, delivery).exec();
     }
 
+    async removeShopperFromDelivery(storeId, shopperEmail, deliveryId) {
+        const delivery = await this.isUpdatableByUser(storeId, ROLE.store, deliveryId);
+        const shopper = await this.shopperService.getShopperByEmail(shopperEmail);
+        if (!shopper) {
+            throw new NotFoundException('Shopper with email ' + shopperEmail + ' not found');
+        }
+        if ((delivery.shopper==null)||delivery.shopper.toString() != shopper._id.toString()) {
+            throw new ConflictException(
+                `Shopper with email ${shopperEmail} isn't affected to the delivery`)
+        }
+        delivery.shopper = null;
+        delivery.status = DELIVERY_STATUS.PENDING;
+        return await this.deliveryModel.updateOne({ _id: deliveryId }, delivery).exec();
+
+    }
     async requestDelivery(deliveryId, shopperId) {
         const delivery = await this.deliveryModel.findById(deliveryId);
         console.log('The delivery:\n', delivery);
@@ -128,6 +146,7 @@ export class DeliveryService {
         const delivery = await this.isUpdatableByUser(shopperId,
             ROLE.shopper, addTrackingDTO.deliveryId)
         if (delivery) {
+            addTrackingDTO.tracking.date = new Date();
             delivery.trackingHistory.push(addTrackingDTO.tracking)
         }
         return await this.deliveryModel.updateOne({ _id: delivery._id }, delivery).exec();
@@ -162,7 +181,7 @@ export class DeliveryService {
     // returns all the deliveries that the shopper applied to but 
     //didn't get accepted byt the store
     async getRequestedDeliveries(shopperId, documentsToSkip = 0, limitOfDocuments?: number) {
-        const deliveries =  this.deliveryModel.
+        const deliveries = this.deliveryModel.
             find({ applicants: shopperId, shopper: { $ne: shopperId } })
             .sort({ _id: 1 }).skip(documentsToSkip);
         if (limitOfDocuments) {

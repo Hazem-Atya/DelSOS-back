@@ -1,18 +1,23 @@
 import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class TrackingDTO {
-  @IsDate()
-  @IsNotEmpty()
-  date: Date;
+    @IsDate()
+    @IsNotEmpty()
+    date: Date;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(255)
-  description: string;
+    @IsString()
+    @IsNotEmpty()
+    @MaxLength(255)
+    description: string;
+    @IsString()
+    @IsNotEmpty()
+    @MaxLength(255)
+    location: string;
 }
 export class AddTrackingDTO {
-  @IsNotEmpty()
-  deliveryId: string;
-  @IsNotEmpty()
-  tracking: TrackingDTO;
+
+    @IsNotEmpty()
+    deliveryId: string;
+    @IsNotEmpty()
+    tracking: TrackingDTO
 }

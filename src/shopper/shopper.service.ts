@@ -18,7 +18,8 @@ import { EmailDto } from 'src/auth/DTO/email.dto';
 import { UtilsService } from 'src/utils/utils.service';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { TYPE } from 'src/utils/enum';
-import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
+import { Password } from 'src/auth/DTO/password.dto';
+
 
 @Injectable()
 export class ShopperService {
@@ -100,31 +101,14 @@ export class ShopperService {
     return this.crudService.update(this.shopperModel, id, newShopper);
   }
 
-  async updateShopperPassword(
-    passwordData: updatePasswordDto,
-    id: string,
-  ): Promise<any> {
-    const currentPassword = await this.shopperModel
-      .findById(id)
-      .select('password');
-    const testPassword = bcrypt.compareSync(
-      passwordData.currentPassword,
-      currentPassword.password,
-    );
-    if (
-      testPassword &&
-      passwordData.newPassword == passwordData.confirmPassword
-    ) {
-      await this.crudService.updatePassword(
-        this.shopperModel,
-        passwordData.newPassword,
-        id,
-      );
-      return HttpStatus.OK
-    }
 
-    return new UnauthorizedException('Check your passwords!');
-  }
+  async updateShopperPassword(password: Password, id: string): Promise<any> {
+    return this.crudService.updatePassword(
+      this.shopperModel,
+      password.oldPassword,
+      password.newPassword,
+      id)}
+
 
   async deleteShopper(id: string): Promise<any> {
     return this.crudService.delete(this.shopperModel, id);

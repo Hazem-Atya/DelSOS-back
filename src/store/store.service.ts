@@ -18,8 +18,8 @@ import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { UtilsService } from 'src/utils/utils.service';
-import { updatePasswordDto } from 'src/auth/DTO/updatePassword.dto';
 
+import { Password } from 'src/auth/DTO/password.dto';
 @Injectable()
 export class StoreService {
   constructor(
@@ -63,7 +63,7 @@ export class StoreService {
     } catch (e) {
       throw new ConflictException(`the email should be unique`);
     }
-    return 'store created';
+    return user;
   }
 
   async getStore(id: string) {
@@ -78,29 +78,14 @@ export class StoreService {
     return this.crudService.update(this.storeModel,id, newStore);
   }
 
-  async updatePasswordStore(passwordData: updatePasswordDto, id): Promise<any> {
-    const currentPassword = await this.storeModel
-      .findById(id)
-      .select('password');
 
-    const testPassword = bcrypt.compareSync(
-      passwordData.currentPassword,
-      currentPassword.password,
-    );
-    if (
-      testPassword &&
-      passwordData.newPassword == passwordData.confirmPassword
-    ) {
-      await this.crudService.updatePassword(
-        this.storeModel,
-        passwordData.newPassword,
-        id,
-      );
-      return HttpStatus.OK;
-    }
-
-    throw new UnauthorizedException('Check your passwords!');
-  }
+  updatePasswordStore(newPassword: Password, id: string): any {
+    return this.crudService.updatePassword(
+      this.storeModel,
+      newPassword.oldPassword,
+      newPassword.newPassword,
+      id,
+    ) }
 
   async deleteStore(id: string) {
     return this.crudService.delete(this.storeModel, id);
@@ -121,7 +106,7 @@ export class StoreService {
 
       store.status = STATUS.activated;
       store.password = hashedPassword;
-      store.save();
+      
 
       const mail = await this.mailService.activateStore({
         name: store.name,
@@ -130,6 +115,7 @@ export class StoreService {
         password,
       });
       if (!mail) return 'mail not sent';
+      store.save();
       //throw new Exception('mail not sent')
       return store;
     } else {
