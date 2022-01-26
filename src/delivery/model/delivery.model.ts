@@ -1,4 +1,3 @@
-import { ROLE, STATUS } from '../../utils/enum';
 import * as mongoose from 'mongoose';
 import { Schema } from '@nestjs/mongoose';
 import { Store } from 'src/store/models/store.model';
@@ -97,5 +96,5 @@ export class Delivery extends mongoose.Document {
   priority: PRIORITY;
   status: DELIVERY_STATUS;
   trackingHistory: { date: Date; description: string }[];
-  applicants: String[];
+  applicants: string[];
 }
