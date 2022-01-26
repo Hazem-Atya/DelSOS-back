@@ -30,7 +30,7 @@ export class StoreService {
     private readonly configService: ConfigService,
     private readonly crudService: CrudService,
     private readonly utilService: UtilsService,
-  ) {}
+  ) { }
 
   async registerStore(
     file: Express.Multer.File,
@@ -70,12 +70,15 @@ export class StoreService {
     return await this.storeModel.findById(id);
   }
 
-  async getAllStores(): Promise<Store[]> {
-    return await this.storeModel.find();
+  async getAllActivatedStores(): Promise<Store[]> {
+    return await this.storeModel.find({ status: STATUS.activated });
+  }
+  async getAllDesactivatedStores(): Promise<Store[]> {
+    return await this.storeModel.find({ status: STATUS.deactivated });
   }
 
-  async updateStore(id,newStore: Store): Promise<any> {
-    return this.crudService.update(this.storeModel,id, newStore);
+  async updateStore(id, newStore: Store): Promise<any> {
+    return this.crudService.update(this.storeModel, id, newStore);
   }
 
   async updatePasswordStore(passwordData: updatePasswordDto, id): Promise<any> {

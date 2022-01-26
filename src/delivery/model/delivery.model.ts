@@ -1,6 +1,4 @@
-import { ROLE, STATUS } from '../../utils/enum';
 import * as mongoose from 'mongoose';
-import { Schema } from '@nestjs/mongoose';
 import { Store } from 'src/store/models/store.model';
 import { Shopper } from 'src/shopper/models/shopper.model';
 import { Types } from 'mongoose';

@@ -10,6 +10,7 @@ import { UtilsModule } from './utils/utils.module';
 import { ShopperModule } from './shopper/shopper.module';
 import { StoreModule } from './store/store.module';
 import { DeliveryModule } from './delivery/delivery.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { DeliveryModule } from './delivery/delivery.module';
     ShopperModule,
     StoreModule,
     DeliveryModule,
+    AdminModule,
 
   ],
   controllers: [AppController],

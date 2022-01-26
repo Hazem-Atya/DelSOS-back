@@ -14,6 +14,7 @@ import { LoginUserDto } from './DTO/userLogin.dto';
 import { Shopper } from 'src/shopper/models/shopper.model';
 import { Store } from 'src/store/models/store.model';
 import { STATUS, TYPE } from 'src/utils/enum';
+import { Admin } from 'src/admin/model/admin.model';
 
 @Injectable()
 export class AuthService {
@@ -22,19 +23,31 @@ export class AuthService {
     private readonly shopperModel: Model<Shopper>,
     @InjectModel('Store')
     private readonly storeModel: Model<Store>,
+    @InjectModel('Admin')
+    private readonly adminModel: Model<Admin>,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async validateUser(loginInfo: LoginUserDto): Promise<any> {
     const { password, email } = loginInfo;
+    console.log(loginInfo);
     const shopper = await this.shopperModel.findOne({ email }).select('+password');
     console.log(shopper);
     let user;
     let type = TYPE.shopper;
     if (!shopper) {
-      user = await this.storeModel.findOne({ email });
+      const store = await this.storeModel.findOne({ email });
       type = TYPE.store;
-    } else user = shopper;
+      if (!store) {
+        user = await this.adminModel.findOne({ email }).select('+password');
+        console.log("admin:",user)
+        type = TYPE.admin
+      } else {
+          user = store
+        }
+    } else { 
+      user = shopper; 
+    }
     if (user && user.status === STATUS.activated) {
       console.log(user);
       const testPassword = bcrypt.compareSync(password, user.password);
