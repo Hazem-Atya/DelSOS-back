@@ -29,7 +29,7 @@ export class DeliveryService {
         const newDelivery = await this.deliveryModel.create(
             {
                 ...delivery,
-                status:DELIVERY_STATUS.PENDING,
+                status: DELIVERY_STATUS.PENDING,
                 store: storeId
             }
         );
