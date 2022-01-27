@@ -28,18 +28,14 @@ export class AuthService {
   async validateUser(loginInfo: LoginUserDto): Promise<any> {
     const { password, email } = loginInfo;
 
-    const shopper = await this.shopperModel.findOne({ email }).select('_id email status +password');
+    const shopper = await this.shopperModel.findOne({ email }).select('_id email status password');
   
     let user;
     let type = TYPE.shopper;
     if (!shopper) {
-      user = await this.storeModel.findOne({ username: email }).select('_id email status +password');
-    
-
+      user = await this.storeModel.findOne({ email }).select('_id email status password');
       type = TYPE.store;
     } else user = shopper;
-    console.log(loginInfo)
-    console.log(user)
     if (user && user.status === STATUS.activated) {
 
       const testPassword = bcrypt.compareSync(password, user.password);
