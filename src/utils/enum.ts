@@ -12,4 +12,5 @@ export enum STATUS {
 export enum TYPE {
   'shopper' = 'SHOPPER',
   'store' = 'STORE',
+  'admin' = 'ADMIN'
 }

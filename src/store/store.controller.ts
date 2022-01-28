@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -22,6 +23,7 @@ import { EmailDto } from 'src/auth/DTO/email.dto';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { Password } from 'src/auth/DTO/password.dto';
 import { editFileName } from 'src/utils/constants';
+import { ROLE } from 'src/utils/enum';
 import { CreateStoreDto } from './DTO/storeCreation.dto';
 import { Store } from './models/store.model';
 import { StoreService } from './store.service';
@@ -47,13 +49,34 @@ export class StoreController {
     return await this.storeService.registerStore(file, createStoreDto);
   }
 
+
+  @Get('/all/activated')
+  @UseGuards(JwtAuthGuard)
+  async getAllActivatedStores(
+    @GetUser() user
+  ): Promise<Store[]> {
+    if(user.role!=ROLE.admin)
+    {
+      throw new UnauthorizedException('ACCESS UNOTHORIZED');
+    }
+    return this.storeService.getAllActivatedStores();
+  }
+
+  @Get('/all/deactivated')
+  @UseGuards(JwtAuthGuard)
+  async getAllDeactivatedStores(
+    @GetUser() user
+  ): Promise<Store[]> {
+    if(user.role!=ROLE.admin)
+    {
+      throw new UnauthorizedException('ACCESS UNOTHORIZED');
+    }
+    return this.storeService.getAllDesactivatedStores();
+  }
+
   @Get('/:id')
   async getStoreById(@Param('id') id: string) {
     return this.storeService.getStore(id);
-  }
-  @Get('/all')
-  async getAllStores(): Promise<Store[]> {
-    return this.storeService.getAllStores();
   }
   @Get('/activate/:id')
   async activateStore(@Param('id') id: string): Promise<any> {

@@ -12,6 +12,8 @@ import { StoreModule } from './store/store.module';
 import { DeliveryModule } from './delivery/delivery.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { AdminModule } from './admin/admin.module';
+
 @Module({
   imports: [
     ServeStaticModule.forRoot({
@@ -32,6 +34,7 @@ import { join } from 'path';
     ShopperModule,
     StoreModule,
     DeliveryModule,
+    AdminModule,
 
   ],
   controllers: [AppController],
