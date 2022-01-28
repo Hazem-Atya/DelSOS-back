@@ -19,6 +19,7 @@ import { UtilsService } from 'src/utils/utils.service';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { TYPE } from 'src/utils/enum';
 import { Password } from 'src/auth/DTO/password.dto';
+import { NotFoundException } from '@nestjs/common';
 
 
 @Injectable()
@@ -31,11 +32,24 @@ export class ShopperService {
     private readonly configService: ConfigService,
     private readonly crudService: CrudService,
     private readonly utilService: UtilsService,
-  ) {}
+  ) { }
 
+  getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
   async registerShopper(userData: CreateShopperDto): Promise<any> {
     const email = userData.email;
     const name = userData.name;
+    const birthdate = userData.birthdate;
+    const age = this.getAge(birthdate)
+    console.log(age)
     const username = `shopper-${name.split(' ').join('')}-delsos`;
 
     if (await this.shopperModel.findOne({ email })) {
@@ -45,6 +59,7 @@ export class ShopperService {
     const hashedPassword = await bcrypt.hash(userData.password, salt);
     const user = await this.shopperModel.create({
       ...userData,
+      age,
       password: hashedPassword,
       username,
       bankDetails: {
@@ -97,17 +112,53 @@ export class ShopperService {
     return query;
   }
 
-  async updateShopper(id, newShopper: Partial<Shopper>): Promise<any> {
-    return this.crudService.update(this.shopperModel, id, newShopper);
+  async updateShopper(id, newShopper, file: Express.Multer.File,): Promise<any> {
+
+    if (file) {
+      console.log(file)
+      const cin = {
+        filename: file.filename,
+        originalname: file.originalname,
+        mimetype: file.mimetype,
+        path: file.path,
+      };
+      newShopper = { ...newShopper, cin }
+    }
+    let shopper = await this.shopperModel.findById(id)
+
+    await shopper.updateOne(newShopper)
+
+    return shopper
+
+
+
   }
 
+  async addPic(id, file) {
+    let picture;
+console.log(file)
+    if (file) {
 
+      picture = file.filename;
+      let shopper = await this.shopperModel.findById(id)
+      await shopper.updateOne({ picture }).then((u) => {
+      
+   
+    
+      })
+      return await this.shopperModel.findById(id);
+    }
+else
+    throw new NotFoundException('There is a problem with your file ')
+
+  }
   async updateShopperPassword(password: Password, id: string): Promise<any> {
     return this.crudService.updatePassword(
       this.shopperModel,
       password.oldPassword,
       password.newPassword,
-      id)}
+      id)
+  }
 
 
   async deleteShopper(id: string): Promise<any> {

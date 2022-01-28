@@ -41,7 +41,7 @@ export const ShopperSchema = new mongoose.Schema(
 
     // range in kilometer where the shopper can deliver
     range: { type: Number, default: 0 },
-
+    picture:{ type: String},
     address: { type: String, default: '' },
 
     status: {
@@ -64,6 +64,7 @@ export class Shopper extends mongoose.Document {
   role: string;
   bankDetails: Object;
   range: Array<number>;
+  picture: string;
   address: string;
   status: string;
 }

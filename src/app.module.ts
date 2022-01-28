@@ -10,10 +10,15 @@ import { UtilsModule } from './utils/utils.module';
 import { ShopperModule } from './shopper/shopper.module';
 import { StoreModule } from './store/store.module';
 import { DeliveryModule } from './delivery/delivery.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       // load: [

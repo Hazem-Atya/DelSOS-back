@@ -5,6 +5,8 @@ import * as morgan from 'morgan';
 import * as dotenv from 'dotenv';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 dotenv.config();
 async function bootstrap() {
@@ -24,6 +26,7 @@ async function bootstrap() {
   };
   app.enableCors(corsOptions);
   app.use(morgan('dev'));
+
   await app.listen(configService.get('APP_PORT'));
 }
 
