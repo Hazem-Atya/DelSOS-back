@@ -62,7 +62,10 @@ export class DeliveryController {
         @Body() delivery_shopper_data: AffectShopperDTO
     ) {
 
+        
         const store = request.user;
+        console.log(store);
+        console.log(delivery_shopper_data);
         return await this.deliveryService.affectShoppertoDelivery(
             store._id,
             delivery_shopper_data.shopperEmail,
