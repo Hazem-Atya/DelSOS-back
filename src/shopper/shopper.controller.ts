@@ -9,15 +9,19 @@ import {
   Param,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiCreatedResponse, ApiHeader } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/user.decorator';
 import { EmailDto } from 'src/auth/DTO/email.dto';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { Password } from 'src/auth/DTO/password.dto';
+import { editFileName } from 'src/utils/constants';
 import { PaginationParams } from 'src/utils/pagination.params';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
 import { Shopper } from './models/shopper.model';
@@ -49,13 +53,42 @@ export class ShopperController {
   ): Promise<Shopper[]> {
     return this.shopperService.getAll_v2(skip, limit);
   }
-  @UseGuards(JwtAuthGuard)
+
+  
   @Post('/update')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileInterceptor('cin', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+    }),
+  )
   async updateShopper(
-    @Body() newShopper: Partial<Shopper>,
+    @Body() newShopper,
     @GetUser() shopper,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
-    return this.shopperService.updateShopper(shopper._id,newShopper);
+    console.log('controller')
+    return this.shopperService.updateShopper(shopper._id,newShopper,file);
+  }
+
+  @Post('/add-pic')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileInterceptor('pic', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: editFileName,
+      }),
+    }),
+  )
+  async updatePic(
+    @GetUser() shopper,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<any> {
+    return this.shopperService.addPic(shopper._id,file);
   }
 
   @ApiHeader({

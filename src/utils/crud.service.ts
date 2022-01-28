@@ -26,18 +26,25 @@ export class CrudService {
    *
    */
 
-  async update(model: Model<any>, id, newData: Partial<Shopper | Store>) {
+  async update(model: Model<any>, id, newData) {
+    console.log(newData)
+      try {
     if (newData) {
-      await model.findByIdAndUpdate(id, newData, function (err, docs) {
+      await model.findByIdAndUpdate(id, newData, function (err, docs) { 
         if (err) {
           console.log(err);
-        } else {
+         return  {'Error': err}
+        } else { 
           const { password, ...updatedUser } = docs;
           return updatedUser;
         }
       });
     }
-    return 'Your data is not valid';
+      }catch (err) {
+        console.log('error', err)
+        return  {'Error': err}
+  }
+   return {'Message': 'Your data is not valid'} ;
   }
 
   /**
@@ -63,7 +70,7 @@ export class CrudService {
 
     if (!user) throw new NotFoundException('NOT FOUND');
 
-    return 'password updated successfully';
+    return user;
   }
 
   /**
