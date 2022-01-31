@@ -63,6 +63,7 @@ export class DeliveryController {
     ) {
 
         const store = request.user;
+
         return await this.deliveryService.affectShoppertoDelivery(
             store._id,
             delivery_shopper_data.shopperEmail,

@@ -31,6 +31,8 @@ import { StoreService } from './store.service';
 @Controller('store')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
+
+  
   @Post('/create-store')
   @UseInterceptors(
     FileInterceptor('file', {
