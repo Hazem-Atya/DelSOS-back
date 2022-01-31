@@ -69,6 +69,8 @@ export class DeliveryService {
 
         const delivery = await this.isUpdatableByUser(storeId, ROLE.store, deliveryId);
         const shopper = await this.shopperService.getShopperByEmail(shopperEmail);
+        console.log(shopper)
+        console.log(delivery)
         if (!shopper) {
             throw new NotFoundException('Shopper with email ' + shopperEmail + ' not found');
         }

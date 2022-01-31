@@ -31,10 +31,10 @@ export const StoreSchema = new mongoose.Schema(
     },
 
     address: {
-      city: { type: String, required: true, default: '' },
-      country: { type: String, required: true, default: '' },
-      postalCode: { type: String, required: true, default: '' },
-      address: { type: String, required: true, default: '' },
+      city: { type: String,default: '' },
+      country: { type: String,  default: '' },
+      postalCode: { type: String,  default: '' },
+      address: { type: String, default: '' },
     },
 
     phoneNumber: { type: String },
