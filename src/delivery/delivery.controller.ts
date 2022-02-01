@@ -3,7 +3,9 @@ import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/user.decorator';
 import { Shopper } from 'src/shopper/models/shopper.model';
+import { Roles } from 'src/utils/decorators/role.decorator';
 import { ROLE } from 'src/utils/enum';
+import { RolesGuard } from 'src/utils/guards/role.guard';
 import { PaginationParams } from 'src/utils/pagination.params';
 import { AddTrackingDTO } from './DTO/add-tracking.dto';
 import { AffectShopperDTO } from './DTO/affect-shopper.dto';
@@ -102,16 +104,13 @@ export class DeliveryController {
 
 
     @Get('shoppersDeliveries')
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles(ROLE.shopper, ROLE.admin)
     async getShopperDeliveries(
         @GetUser() shopper,
         @Query() { skip, limit }: PaginationParams
 
     ) {
-
-        if (shopper.role != ROLE.shopper) {
-            throw new UnauthorizedException("WE NEED A SHOPPER");
-        }
         return await this.deliveryService.getDeliveriesByShopperId(shopper._id, skip, limit);
     }
     @Patch('markAsDelivered')
