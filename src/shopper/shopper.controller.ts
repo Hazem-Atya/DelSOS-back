@@ -36,14 +36,14 @@ export class ShopperController {
   @Post('/register')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})
-  @Roles(ROLE.shopper)
+  //@Roles(ROLE.shopper)
   async shopperRregister(@Body() createShopperDto: CreateShopperDto) {
     console.log(createShopperDto);
     return await this.shopperService.registerShopper(createShopperDto);
   }
 
   @Get('/:id')
-  @Roles(ROLE.shopper,ROLE.admin)
+  //@Roles(ROLE.shopper,ROLE.admin)
   async getShopperById(@Param('id') id: string) {
     return this.shopperService.getShopper(id);
   }
@@ -53,7 +53,7 @@ export class ShopperController {
     return this.shopperService.getAll();
   }
   @Get('get/all')
-  @Roles(ROLE.admin)
+  //@Roles(ROLE.admin)
   async getAllWithPagination(
     @Query() { skip, limit }: PaginationParams,
   ): Promise<Shopper[]> {
