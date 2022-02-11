@@ -55,7 +55,6 @@ export class Shopper extends mongoose.Document {
   name: string;
   username: string;
   email: string;
-  birthdate : string;
   cinNumber : String;
   cin : Express.Multer.File;
   password: string;

@@ -22,6 +22,9 @@ import { EmailDto } from 'src/auth/DTO/email.dto';
 import { ForgotPasswordDto } from 'src/auth/DTO/forgotPassword.dto';
 import { Password } from 'src/auth/DTO/password.dto';
 import { editFileName } from 'src/utils/constants';
+import { Roles } from 'src/utils/decorators/role.decorator';
+import { ROLE } from 'src/utils/enum';
+import { RolesGuard } from 'src/utils/guards/role.guard';
 import { PaginationParams } from 'src/utils/pagination.params';
 import { CreateShopperDto } from './DTO/shopperCreation.dto';
 import { Shopper } from './models/shopper.model';
@@ -40,14 +43,21 @@ export class ShopperController {
   }
 
   @Get('/:id')
+  @Roles(ROLE.shopper, ROLE.admin)
   async getShopperById(@Param('id') id: string) {
+    console.log("id",id);
+    
     return this.shopperService.getShopper(id);
   }
   @Get('/shoppers/all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLE.admin)
   async getAllShoppers(): Promise<Shopper[]> {
     return this.shopperService.getAll();
   }
   @Get('get/all')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLE.admin)
   async getAllWithPagination(
     @Query() { skip, limit }: PaginationParams,
   ): Promise<Shopper[]> {
@@ -56,7 +66,8 @@ export class ShopperController {
 
   
   @Post('/update')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLE.shopper,ROLE.admin)
   @UseInterceptors(
     FileInterceptor('cin', {
       storage: diskStorage({
@@ -75,7 +86,8 @@ export class ShopperController {
   }
 
   @Post('/add-pic')
-  @UseGuards(JwtAuthGuard)
+  @Roles(ROLE.shopper)
+  @UseGuards(JwtAuthGuard,RolesGuard)
   @UseInterceptors(
     FileInterceptor('pic', {
       storage: diskStorage({
@@ -95,7 +107,8 @@ export class ShopperController {
     name: 'Bearer',
     description: 'the token we need for authentification.',
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard,RolesGuard)
+  @Roles(ROLE.shopper)
   @Post('/update-password')
   async updatePasswordShopper(
     @Body() passwordData: Password,
@@ -105,6 +118,8 @@ export class ShopperController {
   }
 
   @Delete('/delete/:id')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(ROLE.shopper,ROLE.admin)
   async deleteShopper(@Param('id') id: string): Promise<any> {
     return this.shopperService.deleteShopper(id);
   }
@@ -119,7 +134,8 @@ export class ShopperController {
     name: 'Bearer',
     description: 'the token we need for authentification.',
   })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard,RolesGuard)
+  @Roles(ROLE.shopper,ROLE.admin)
   @Post('/reset-password')
   @ApiCreatedResponse({})
   async resetPassword(

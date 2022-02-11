@@ -38,8 +38,7 @@ export class AuthService {
       type = TYPE.store;
       if (!store) {
         user = await this.adminModel.findOne({ email }).select('+password');
-        console.log("admin:",user)
-        type = TYPE.admin
+        type = TYPE.admin;
       } else {
           user = store
         }

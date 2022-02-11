@@ -31,6 +31,8 @@ import { StoreService } from './store.service';
 @Controller('store')
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
+
+  
   @Post('/create-store')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -55,6 +57,7 @@ export class StoreController {
   async getAllActivatedStores(
     @GetUser() user
   ): Promise<Store[]> {
+    console.log('Bonjour');
     if(user.role!=ROLE.admin)
     {
       throw new UnauthorizedException('ACCESS UNOTHORIZED');
