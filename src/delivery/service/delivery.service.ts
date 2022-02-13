@@ -26,7 +26,9 @@ export class DeliveryService {
         return await this.deliveryModel.find().count();
     }
     async getDeliveryById(id) {
-        return await this.deliveryModel.findById(id);
+        const delivery= await this.deliveryModel.findById(id); 
+        console.log(delivery);
+        return delivery;
     }
     async addDelivery(storeId: any, delivery: CreateDeliveryDTO): Promise<any> {
         const newDelivery = await this.deliveryModel.create(

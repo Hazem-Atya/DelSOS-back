@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, NotFoundException, Patch, Post, Query, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, NotFoundException, Param, Patch, Post, Query, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/auth-guards/jwt-auth.guard';
 import { GetUser } from 'src/auth/decorators/user.decorator';
@@ -18,11 +18,18 @@ export class DeliveryController {
     constructor(private deliveryService: DeliveryService) { }
 
 
+    @Get('/:id')
+    async getDeliveryById(
+        @Param('id') id: string
+    ) {
+        return await this.deliveryService.getDeliveryById(id);
+    }
+
     @Get()
     @UseGuards(JwtAuthGuard)
     async getNumberOfDeliveries(
         @Req() request
-    ){
+    ) {
         console.log(request);
         const admin = request.user;
 
