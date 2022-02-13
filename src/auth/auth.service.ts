@@ -34,7 +34,7 @@ export class AuthService {
     let user;
     let type = TYPE.shopper;
     if (!shopper) {
-      const store = await this.storeModel.findOne({ email });
+      const store = await this.storeModel.findOne({ email }).select("+password");
       type = TYPE.store;
       if (!store) {
         user = await this.adminModel.findOne({ email }).select('+password');

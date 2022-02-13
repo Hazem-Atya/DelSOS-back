@@ -12,7 +12,10 @@ export const StoreSchema = new mongoose.Schema(
       minlength: 6,
       unique: true,
     },
-    password: { type: String },
+    password: {
+       type: String,
+       select: false
+     },
     username: { type: String },
     source: {
       filename: { type: String, required: false },
