@@ -43,9 +43,10 @@ export class ShopperController {
   }
 
   @Get('/:id')
-  
-  //@Roles(ROLE.shopper,ROLE.admin)
+  @Roles(ROLE.shopper, ROLE.admin)
   async getShopperById(@Param('id') id: string) {
+    console.log("id",id);
+    
     return this.shopperService.getShopper(id);
   }
   @Get('/shoppers/all')
