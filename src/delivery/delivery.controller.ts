@@ -18,7 +18,19 @@ export class DeliveryController {
     constructor(private deliveryService: DeliveryService) { }
 
 
+    @Get()
+    @UseGuards(JwtAuthGuard)
+    async getNumberOfDeliveries(
+        @Req() request
+    ){
+        console.log(request);
+        const admin = request.user;
 
+        if (admin.role != 'ADMIN') {
+            throw new UnauthorizedException();
+        }
+        return await this.deliveryService.getNumberOfDeliveries();
+    }
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @UseGuards(JwtAuthGuard)

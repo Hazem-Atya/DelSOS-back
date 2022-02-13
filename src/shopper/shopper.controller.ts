@@ -56,7 +56,7 @@ export class ShopperController {
   }
   @Get('get/all')
     @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(ROLE.admin)
+   @Roles(ROLE.admin)
   async getAllWithPagination(
     @Query() { skip, limit }: PaginationParams,
   ): Promise<Shopper[]> {

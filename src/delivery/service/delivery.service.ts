@@ -22,6 +22,9 @@ export class DeliveryService {
     ) {
     }
 
+    async getNumberOfDeliveries(){
+        return await this.deliveryModel.find().count();
+    }
     async getDeliveryById(id) {
         return await this.deliveryModel.findById(id);
     }

@@ -7,6 +7,7 @@ import { Model } from 'mongoose';
 import { Shopper } from 'src/shopper/models/shopper.model';
 import { Store } from 'src/store/models/store.model';
 import { STATUS, TYPE } from 'src/utils/enum';
+import { Admin } from 'src/admin/model/admin.model';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -16,6 +17,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly shopperModel: Model<Shopper>,
     @InjectModel('Store')
     private readonly storeModel: Model<Store>,
+    @InjectModel('Admin')
+    private readonly adminModel: Model<Admin>,
+
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -29,7 +33,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any) {
     let user;
-    if (payload.type === TYPE.shopper)
+    if (payload.type === TYPE.admin)
+      user = await this.adminModel.findOne({ email: payload.email });
+    else if (payload.type === TYPE.shopper)
       user = await this.shopperModel.findOne({ email: payload.email });
     else user = await this.storeModel.findOne({ email: payload.email });
     if (!user || user.status === STATUS.deactivated) {
