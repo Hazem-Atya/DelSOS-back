@@ -17,20 +17,11 @@ import { DeliveryService } from './service/delivery.service';
 export class DeliveryController {
     constructor(private deliveryService: DeliveryService) { }
 
-
-    @Get('/:id')
-    async getDeliveryById(
-        @Param('id') id: string
-    ) {
-        return await this.deliveryService.getDeliveryById(id);
-    }
-
     @Get()
     @UseGuards(JwtAuthGuard)
     async getNumberOfDeliveries(
         @Req() request
     ) {
-        console.log(request);
         const admin = request.user;
 
         if (admin.role != 'ADMIN') {
@@ -50,7 +41,6 @@ export class DeliveryController {
         if (store.role != 'STORE') {
             throw new UnauthorizedException();
         }
-        console.log("This is the store I received:", store._id)
         return await this.deliveryService.addDelivery(store._id, createDeliveryDTO);
     }
 
@@ -171,4 +161,10 @@ export class DeliveryController {
         return await this.deliveryService.addTrackingData(shopper._id, addTrackingData);
     }
 
+    @Get('/:id')
+    async getDeliveryById(
+        @Param('id') id: string
+    ) {
+        return await this.deliveryService.getDeliveryById(id);
+    }
 }

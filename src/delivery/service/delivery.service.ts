@@ -27,7 +27,6 @@ export class DeliveryService {
     }
     async getDeliveryById(id) {
         const delivery= await this.deliveryModel.findById(id); 
-        console.log(delivery);
         return delivery;
     }
     async addDelivery(storeId: any, delivery: CreateDeliveryDTO): Promise<any> {
@@ -38,7 +37,6 @@ export class DeliveryService {
                 store: storeId
             }
         );
-        console.log(newDelivery);
         return delivery;
     }
     // this function returns deliveries that are not delivered yet
@@ -74,8 +72,6 @@ export class DeliveryService {
 
         const delivery = await this.isUpdatableByUser(storeId, ROLE.store, deliveryId);
         const shopper = await this.shopperService.getShopperByEmail(shopperEmail);
-        console.log(shopper)
-        console.log(delivery)
         if (!shopper) {
             throw new NotFoundException('Shopper with email ' + shopperEmail + ' not found');
         }
@@ -104,7 +100,6 @@ export class DeliveryService {
     }
     async requestDelivery(deliveryId, shopperId) {
         const delivery = await this.deliveryModel.findById(deliveryId);
-        console.log('The delivery:\n', delivery);
         if (!delivery) {
             throw new NotFoundException('Delivery not found');
         }
@@ -179,9 +174,6 @@ export class DeliveryService {
         }
         else if (userRole == ROLE.store)
             if (delivery.store.toString() != userID.toString()) {
-                console.log('store Id:', userID);
-                console.log('delivery Id:', delivery.store);
-                console.log('hey there!!');
                 throw new UnauthorizedException("You can't change a delivery that does not belong to you");
             }
         return delivery;
@@ -196,7 +188,6 @@ export class DeliveryService {
             // when limit =0 this condition will be false
             deliveries.limit(limitOfDocuments);
         }
-        console.log(deliveries);
         return deliveries;
     }
     async getDeliverisesByShopperId(shopperId, documentsToSkip = 0, limitOfDocuments?: number) {

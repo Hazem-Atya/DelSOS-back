@@ -86,7 +86,6 @@ export class AuthService {
   }
 
   async verifyToken(token: string) {
-    console.log(token);
     const payload = await this.jwtService.verify(token);
     const user = { data: null, model: null };
     if (payload.type === TYPE.shopper) {

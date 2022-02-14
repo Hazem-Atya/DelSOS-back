@@ -21,8 +21,6 @@ export class AuthController {
     @GetUser() user,
     @Req() req
   ) {
-    console.log('request: ',req);
-    console.log(user)
     return this.authService.createToken(
       user,
       this.configService.get('LOGIN_TOKEN_EXPIRATION'),
