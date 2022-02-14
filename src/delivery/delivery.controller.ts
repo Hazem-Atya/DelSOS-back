@@ -46,7 +46,7 @@ export class DeliveryController {
 
     @Get('all')
     @UseGuards(JwtAuthGuard)
-    async getToresDeliveries(
+    async getStoresDeliveries(
         @Req() request
     ) {
         const store = request.user;
@@ -54,7 +54,13 @@ export class DeliveryController {
         return await this.deliveryService.getDeliveriesByStoreId(store._id);
 
     }
-
+    @Get('all/unaffected')
+    @UseGuards(JwtAuthGuard)
+    async getAllUnaffectedDeliveries(
+        @Req() request
+    ) {
+        return await this.deliveryService.getAllUnaffactedDeliveries();
+    }
     // get the deliveris that have been delivered
     @Get('archive')
     @UseGuards(JwtAuthGuard)

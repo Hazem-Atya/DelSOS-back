@@ -51,6 +51,10 @@ export class DeliveryService {
         }
         return deliveries;
     }
+    async getAllUnaffactedDeliveries() {
+        const deliveries= this.deliveryModel.find({status: DELIVERY_STATUS.PENDING});
+        return deliveries;
+    }
 
     async getArchivedDeliveriesByStoreId(storeId, documentsToSkip = 0, limitOfDocuments?: number) {
         const deliveries = this.deliveryModel.find({
