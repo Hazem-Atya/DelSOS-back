@@ -57,7 +57,6 @@ export class DeliveryController {
     @Get('all/unaffected')
     @UseGuards(JwtAuthGuard)
     async getAllUnaffectedDeliveries(
-        @Req() request
     ) {
         return await this.deliveryService.getAllUnaffactedDeliveries();
     }
