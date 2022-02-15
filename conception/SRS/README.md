@@ -3,8 +3,6 @@
 - [1. INTRODUCTION](#1-introduction)
   - [1.1 Document Purpose](#11document-purpose)
   - [1.2 Product Scope](#12product-scope)
-  - [1.3	Intended Audience and Document Overview](#13intended-audience-and-document-overview)
-  - [1.4	Definitions, Acronyms and Abbreviations](#14definitions-acronyms-and-abbreviations)
 - [2. OVERALL DESCRIPTION](#2overall-description)
   - [2.1	Product Perspective](#21product-perspective)
   - [2.2	Product Functionality](#22product-functionality)
@@ -19,9 +17,6 @@
 - [4. NON-FUNCTIONAL REQUIREMENTS](#4-non-functional-requirements)
   - [4.1  Performance Requirements](#41performance-requirements)
   - [4.2 Safety and Security Requirements](#42safety-and-security-requirements)
-- [5. Other Requirements](#5other-requirements)
-   - [5.1	Licensing Requirements](#5other-requirements)
-   - [5.2	Legal, Copyright, and Other Notices](#5other-requirements)
 
 
 ## 1. INTRODUCTION
@@ -36,22 +31,6 @@ This system will help to manage and run the delivery business systematically. In
  This will ultimately lead to hire less delivery persons and create an opportunity to make more deliveries and deliver them in less time . <br />
  All the information about daily expenses and profit will be saved in the system. 
 Also, the required information  about employees will be saved in the system which can be only accessed by the system admin.
-
-
-### 1.3	Intended Audience and Document Overview
-This document is intended for different types of readers such as DelSOS platform owner, system designer, system developer and tester. By reading this document a reader can learn about what the project is implemented for and how it will present its basic ideas.
-This document has a sequential overview of the whole project so if a reader reads the document from top to bottom, he will get a clear idea about the project.
-
-### 1.4	Definitions, Acronyms and Abbreviations
-
-|Term|Definition|
-|---|---|
-|System admin|System admin is a person who is responsible for managing the whole system and who has full access to the system.|
-|System User|A person who is using or operating the system but with a limited privilege.|
-|Field|A cell within a form.|
-|Software Requirements Specification (SRS)|A document that completely describes all of the functions of a proposed system and the constraints under which it must operate. For example, this document.|
-|DelSOS|The delivery platform name.|
-|POS|A point of sale system is either a stand-alone machine or a network of input and output devices used by|
 
 -------------------------------------------------------------------------------------------------------------------------
 
@@ -184,6 +163,8 @@ The shopper has to get registered to be able to order a delivery and to deliver 
 The shopper can give overall review about the delivery person and services.
 
 ### 3.3	Behaviour Requirements
+
+### Usecase 
 <img src="https://github.com/DelSOS/DelSOS-back/blob/main/conception/SRS/usecase.PNG" alt="usecase"   />
 
 
@@ -235,6 +216,19 @@ The shopper can give overall review about the delivery person and services.
 
 
 -------------------------------------------------------------------------------------------------------------------------
+### Sequence 
+
+
+#### Consult the list and pickout a delivery
+
+<img src="https://github.com/DelSOS/DelSOS-back/blob/main/conception/Sequence%20digram/pickout%20seq.png" alt="pickout" />
+
+##### cancel case 
+
+<img src="https://github.com/DelSOS/DelSOS-back/blob/main/conception/Sequence%20digram/cancel%20seq.png" alt="pickout" />
+
+##### Delivery Process 
+<img src="https://github.com/DelSOS/DelSOS-back/blob/main/conception/Sequence%20digram/seq%20delivery.png" alt="pickout" />
 
 ## 4. NON-FUNCTIONAL REQUIREMENTS	
 
@@ -260,16 +254,5 @@ The shopper can give overall review about the delivery person and services.
 - This system will use secured POS system.
 
 
--------------------------------------------------------------------------------------------------------------------------
 
-## 5.	Other Requirements
-
-### 5.1	Licensing Requirements
-
-Not Applicable
-
-
-### 5.2	Legal, Copyright, and Other Notices
-
-All right reserved by our team.
 
