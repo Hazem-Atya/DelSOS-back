@@ -17,6 +17,18 @@ import { DeliveryService } from './service/delivery.service';
 export class DeliveryController {
     constructor(private deliveryService: DeliveryService) { }
 
+    @Get('entire')
+    @UseGuards(JwtAuthGuard)
+    async getAllDeliveries(
+        @Req() request
+    ) {
+        const admin = request.user;
+        if (admin.role != 'ADMIN') {
+            throw new UnauthorizedException();
+        }
+        return await this.deliveryService.getAllDeliveries();
+    }
+
     @Get()
     @UseGuards(JwtAuthGuard)
     async getNumberOfDeliveries(

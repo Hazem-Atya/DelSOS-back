@@ -99,7 +99,7 @@ export class StoreService {
     if (!stores) throw new NotFoundException('NOT FOUND');
     return stores;
   }
-
+  
   async activate(id: string): Promise<any> {
     const store = await this.storeModel.findById(id);
     if (store) {
@@ -118,7 +118,9 @@ export class StoreService {
         password,
       });
       if (!mail) return 'mail not sent';
-      store.save();
+      console.log(store);
+      
+      await this.storeModel.findByIdAndUpdate(store._id,{status:STATUS.activated});
       //throw new Exception('mail not sent')
       return store;
     } else {
