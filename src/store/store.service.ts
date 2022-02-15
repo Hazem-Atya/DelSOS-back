@@ -31,7 +31,9 @@ export class StoreService {
     private readonly crudService: CrudService,
     private readonly utilService: UtilsService,
   ) { }
-
+  async getNumberOfStores(){
+    return await this.storeModel.find().count(); 
+  }
   async registerStore(
     file: Express.Multer.File,
     userData: CreateStoreDto,

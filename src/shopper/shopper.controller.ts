@@ -9,6 +9,8 @@ import {
   Param,
   Post,
   Query,
+  Req,
+  UnauthorizedException,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -34,6 +36,19 @@ import { ShopperService } from './shopper.service';
 export class ShopperController {
   constructor(private readonly shopperService: ShopperService) {}
 
+  
+  @Get('/number')
+  @UseGuards(JwtAuthGuard)
+  async getNumberOfDeliveries(
+      @Req() request
+  ) {
+      const admin = request.user;
+
+      if (admin.role != 'ADMIN') {
+          throw new UnauthorizedException();
+      }
+      return await this.shopperService.getNumberOfShoppers();
+  }
   @Post('/register')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({})

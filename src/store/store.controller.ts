@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Req,
   UnauthorizedException,
   UploadedFile,
   UseGuards,
@@ -32,7 +33,18 @@ import { StoreService } from './store.service';
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
-  
+  @Get('/number')
+  @UseGuards(JwtAuthGuard)
+  async getNumberOfDeliveries(
+      @Req() request
+  ) {
+      const admin = request.user;
+
+      if (admin.role != 'ADMIN') {
+          throw new UnauthorizedException();
+      }
+      return await this.storeService.getNumberOfStores();
+  }
   @Post('/create-store')
   @UseInterceptors(
     FileInterceptor('file', {

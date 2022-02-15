@@ -34,6 +34,9 @@ export class ShopperService {
     private readonly utilService: UtilsService,
   ) { }
 
+  async getNumberOfShoppers(){
+    return await this.shopperModel.find().count(); 
+  }
   getAge(dateString) {
     var today = new Date();
     var birthDate = new Date(dateString);

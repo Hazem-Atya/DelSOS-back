@@ -29,7 +29,7 @@ export class DeliveryController {
         return await this.deliveryService.getAllDeliveries();
     }
 
-    @Get()
+    @Get('/number')
     @UseGuards(JwtAuthGuard)
     async getNumberOfDeliveries(
         @Req() request
